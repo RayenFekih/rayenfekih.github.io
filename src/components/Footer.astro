@@ -1,0 +1,23 @@
+---
+import { siteConfig } from "../config/site";
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="shell footer-grid">
+    <div>
+      <a class="brand footer-brand" href="/">
+        <span class="brand-mark">RF</span>
+        <span class="brand-name">Rayen Fekih</span>
+      </a>
+      <p>AI / Machine Learning Engineer with experience in GenAI, RAG, semantic search, and cloud deployment.</p>
+    </div>
+    <div class="footer-links">
+      <a href="mailto:rayen.fekih6@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/rayen-fekih/" rel="me">LinkedIn</a>
+      <a href="https://github.com/RayenFekih" rel="me">GitHub</a>
+      <a href={siteConfig.cvPath} download>Download CV</a>
+    </div>
+    <p class="footer-meta">© {year} Mohamed Rayen Fekih<br />Tunis, Tunisia · Open to remote opportunities</p>
+  </div>
+</footer>

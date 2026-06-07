@@ -1,0 +1,197 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { experience } from "../data/experience";
+import { siteConfig } from "../config/site";
+
+const skills = [
+  {
+    title: "AI and Machine Learning",
+    items: ["GenAI", "RAG", "Semantic Search", "Agent Workflows", "Recommendation Systems", "Forecasting", "Pricing Models", "Scikit-learn"]
+  },
+  {
+    title: "Programming and Data",
+    items: ["Python", "SQL", "PySpark", "Pandas", "NumPy", "Cython"]
+  },
+  {
+    title: "Cloud and Deployment",
+    items: ["Google Cloud", "Vertex AI", "BigQuery", "Cloud Run", "Cloud Storage", "Docker", "CI/CD", "Git"]
+  },
+  {
+    title: "Frameworks and Tools",
+    items: ["LangChain", "LangGraph", "n8n", "Google RAG Engine", "Tableau", "GitLab"]
+  }
+];
+---
+<BaseLayout
+  title="Home"
+  description="Mohamed Rayen Fekih is an AI and Machine Learning Engineer with experience in GenAI, RAG, semantic search, recommendation systems, forecasting, pricing, and cloud deployment."
+>
+  <script
+    slot="head"
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      mainEntity: {
+        "@type": "Person",
+        name: "Mohamed Rayen Fekih",
+        alternateName: "Rayen Fekih",
+        jobTitle: "AI / Machine Learning Engineer",
+        url: "https://rayenfekih.github.io",
+        email: "mailto:rayen.fekih6@gmail.com",
+        sameAs: [
+          "https://www.linkedin.com/in/rayen-fekih/",
+          "https://github.com/RayenFekih"
+        ],
+        knowsAbout: ["Generative AI", "RAG", "Semantic search", "Machine learning", "Google Cloud"]
+      }
+    })}
+  />
+
+  <section class="cv-hero shell">
+    <h1>Mohamed Rayen Fekih</h1>
+    <p class="cv-role">AI / Machine Learning Engineer</p>
+    <p class="cv-summary">
+      AI Engineer with experience building GenAI, RAG, semantic search, recommendation,
+      forecasting, and pricing systems. I focus on turning applied AI projects into
+      production systems using Python, GCP, BigQuery, Vertex AI, Docker, and modern ML workflows.
+    </p>
+    <div class="button-row cv-actions">
+      <a class="button" href={siteConfig.cvPath} download>Download CV <Icon name="download" /></a>
+      <a class="button button-secondary" href="https://www.linkedin.com/in/rayen-fekih/">LinkedIn <Icon name="external" /></a>
+      <a class="button button-secondary" href="mailto:rayen.fekih6@gmail.com">Email <Icon name="mail" /></a>
+      <a class="button button-secondary" href="https://github.com/RayenFekih">GitHub <Icon name="external" /></a>
+    </div>
+  </section>
+
+  <section class="cv-section section-toned" id="experience">
+    <div class="shell">
+      <div class="cv-section-heading">
+        <p class="eyebrow">Career</p>
+        <h2>Work Experience</h2>
+      </div>
+      <div class="home-experience-list">
+        {experience.map((job) => (
+          <article class="home-job">
+            <header class="home-job-header">
+              <div>
+                <h3>{job.role}</h3>
+                <p class="company-name">{job.company}</p>
+              </div>
+              <div class="job-meta">
+                <span>{job.period}</span>
+                <span>{job.location}</span>
+              </div>
+            </header>
+            <p class="job-summary">{job.summary}</p>
+            <ul class="responsibility-list">
+              {job.responsibilities.map((item) => <li>{item}</li>)}
+            </ul>
+            <div class="role-projects">
+              <p class="role-projects-label">Projects</p>
+              {job.projects.map((project) => (
+                <article class="role-project-card">
+                  <div class="role-project-main">
+                    <h4>
+                      {project.href ? <a href={project.href}>{project.title}</a> : project.title}
+                    </h4>
+                    <p>{project.description}</p>
+                    <p class="project-contribution"><strong>Contribution:</strong> {project.contribution}</p>
+                    <div class="tag-row compact-tags">
+                      {project.technologies.map((technology) => <span>{technology}</span>)}
+                    </div>
+                    {project.href && <a class="text-link" href={project.href}>View project details <span aria-hidden="true">→</span></a>}
+                  </div>
+                  {project.metric && (
+                    <div class="project-metric">
+                      <strong>{project.metric.value}</strong>
+                      <span>{project.metric.label}</span>
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+      <a class="text-link section-end-link" href="/experience/">View experience page <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="cv-section shell" id="projects">
+    <div class="cv-section-heading">
+      <p class="eyebrow">Portfolio</p>
+      <h2>Selected Projects</h2>
+      <p>Detailed case studies for selected GenAI and machine learning projects.</p>
+    </div>
+    <div class="selected-project-links">
+      {experience.flatMap((job) =>
+        job.projects
+          .filter((project) => project.href)
+          .map((project) => (
+            <a class="selected-project-link" href={project.href}>
+              <span>
+                <small>{job.company}</small>
+                <strong>{project.title}</strong>
+                <p>{project.description}</p>
+              </span>
+              <span aria-hidden="true">→</span>
+            </a>
+          ))
+      )}
+    </div>
+  </section>
+
+  <section class="cv-section section-toned" id="skills">
+    <div class="shell">
+      <div class="cv-section-heading">
+        <p class="eyebrow">Technical profile</p>
+        <h2>Skills</h2>
+      </div>
+      <div class="skills-grid">
+        {skills.map((group) => (
+          <article class="skill-group">
+            <h3>{group.title}</h3>
+            <div class="tag-row">
+              {group.items.map((item) => <span>{item}</span>)}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cv-section shell" id="education">
+    <div class="cv-section-heading">
+      <p class="eyebrow">Background</p>
+      <h2>Education</h2>
+    </div>
+    <article class="education-row">
+      <div>
+        <h3>MS in Computer Science</h3>
+        <p>National Engineering School of Tunis (ENIT)</p>
+      </div>
+      <div class="job-meta">
+        <span>2016 - 2021</span>
+        <span>Tunis, Tunisia</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="cv-contact section-toned" id="contact">
+    <div class="shell contact-grid">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h2>Get in touch</h2>
+        <p>For job opportunities or professional conversations, contact me by email or LinkedIn.</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:rayen.fekih6@gmail.com">rayen.fekih6@gmail.com <span>↗</span></a>
+        <a href="https://www.linkedin.com/in/rayen-fekih/">LinkedIn <span>↗</span></a>
+        <a href="https://github.com/RayenFekih">GitHub <span>↗</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

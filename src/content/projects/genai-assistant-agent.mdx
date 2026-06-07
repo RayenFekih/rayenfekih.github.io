@@ -1,0 +1,64 @@
+---
+title: "GenAI Assistant Agent"
+summary: "A graph-based enterprise assistant with tool calling, dynamic routing, contextual memory, and containerized deployment."
+role: "Machine Learning Engineer"
+employer: "Infor"
+period: "2023 - 2025"
+featuredRank: 4
+problem: "Create an enterprise assistant capable of routing requests through a graph, invoking functions, and retaining useful context across interactions while remaining portable across environments."
+scale: "Enterprise agent workflow"
+metrics:
+  - value: "Graph"
+    label: "explicit orchestration"
+  - value: "Memory"
+    label: "context retrieval"
+  - value: "Docker"
+    label: "portable deployment"
+capabilities:
+  - "Agent orchestration"
+  - "Function calling"
+  - "Memory systems"
+technologies:
+  - "Python"
+  - "LangGraph Studio"
+  - "LangChain"
+  - "Docker"
+confidentiality: "This summary covers publicly shareable engineering responsibilities. Customer data, tool definitions, prompts, and production usage metrics are confidential."
+diagramType: "graph"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+Enterprise assistants need more than conversational generation. They must decide which capability to invoke, manage the state of a multi-step task, and retrieve relevant prior context without allowing memory to become an uncontrolled transcript.
+
+## Constraints
+
+- Different requests required different functions and response paths.
+- Conversation state needed explicit management.
+- Stored context had to remain relevant to the current interaction.
+- The application needed consistent deployment across environments.
+
+## My role
+
+I developed the graph-based agent system in LangGraph Studio, integrated function calling and dynamic response behavior, implemented contextual memory management, and containerized the application with Docker.
+
+<h2 id="implementation">Orchestration and memory</h2>
+
+The graph makes routing decisions and state transitions explicit. Tool execution, memory retrieval, and response generation occupy separate stages, making the assistant easier to reason about than a single open-ended loop.
+
+The memory layer stores and retrieves relevant contextual information to support longer-term coherence. Public details do not include customer-specific tools, memory policies, or usage data.
+
+<h2 id="evaluation">Evaluation</h2>
+
+The design supports stage-level inspection: routing, function invocation, memory retrieval, and final response can be evaluated separately. This is important because a plausible final answer can conceal an incorrect tool choice or irrelevant memory retrieval.
+
+<h2 id="deployment">Deployment</h2>
+
+Docker packaging provided a consistent runtime and simplified movement between development and deployment environments.
+
+<h2 id="results">Results and lessons</h2>
+
+The project established an agentic application pattern built around explicit graph orchestration, tool use, and managed context.
+
+The key lesson was to treat memory as retrieval, not accumulation. Useful memory is selected for the current task; indiscriminate history makes agent behavior less predictable.

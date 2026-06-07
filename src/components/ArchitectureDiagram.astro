@@ -1,0 +1,43 @@
+---
+const { type, label = "Sanitized system architecture" } = Astro.props;
+
+const diagrams = {
+  retrieval: {
+    nodes: ["Source corpus", "Batch processing", "Embeddings", "Vector index", "Search API"],
+    accent: 3
+  },
+  agents: {
+    nodes: ["Requirements", "Planner agent", "Retrieval", "Generator", "Evaluator"],
+    accent: 4
+  },
+  "human-loop": {
+    nodes: ["User query", "Intent agent", "RAG response", "Risk check", "Scholar handoff"],
+    accent: 4
+  },
+  graph: {
+    nodes: ["User request", "Graph router", "Tools", "Memory", "Response"],
+    accent: 1
+  }
+};
+const diagram = diagrams[type as keyof typeof diagrams];
+---
+<figure class="architecture" aria-label={label}>
+  <div class="architecture-topline">
+    <span>System view</span>
+    <span class="sanitized-label">Sanitized</span>
+  </div>
+  <div class="architecture-flow">
+    {
+      diagram.nodes.map((node, index) => (
+        <>
+          <div class:list={["architecture-node", { "node-accent": index === diagram.accent }]}>
+            <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
+            <span>{node}</span>
+          </div>
+          {index < diagram.nodes.length - 1 && <span class="flow-arrow" aria-hidden="true">→</span>}
+        </>
+      ))
+    }
+  </div>
+  <figcaption>{label}. Representative flow; proprietary implementation details omitted.</figcaption>
+</figure>

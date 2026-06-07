@@ -1,0 +1,72 @@
+---
+title: "IslamWeb RAG Chatbot"
+summary: "An Arabic retrieval-augmented assistant that answers questions from a trusted fatwa corpus and escalates ambiguous or sensitive conversations to a qualified scholar."
+role: "AI Engineer"
+employer: "iHorizons"
+period: "2025 - Present"
+featuredRank: 3
+problem: "Provide useful Arabic answers from an established religious knowledge base without allowing an automated assistant to overstep when a question requires contextual judgment from a scholar."
+scale: "Production Arabic assistant"
+metrics:
+  - value: "HITL"
+    label: "scholar escalation"
+  - value: "Arabic"
+    label: "retrieval and dialogue"
+  - value: "2"
+    label: "delivery channels"
+capabilities:
+  - "RAG"
+  - "Human-in-the-loop"
+  - "Intent detection"
+technologies:
+  - "Python"
+  - "Gemini Embeddings"
+  - "BigQuery Vector Search"
+  - "Telegram"
+  - "Google Cloud"
+confidentiality: "This public case study describes the interaction pattern and technology categories. Private prompts, routing criteria, conversation data, and service internals are omitted."
+diagramType: "human-loop"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+A religious assistant needs a clear boundary between questions that can be answered from retrieved material and questions that require a scholar's interpretation. The product therefore needed both an effective RAG path and a first-class escalation path.
+
+The goal was not to maximize automated resolution at any cost. It was to create a system that could be helpful while recognizing when automation was no longer appropriate.
+
+## Constraints
+
+- Arabic queries may be colloquial, incomplete, or context dependent.
+- Retrieved evidence must come from the approved fatwa corpus.
+- Sensitive or ambiguous requests must reach a qualified human.
+- Conversation state must survive the transition from assistant to scholar.
+- The experience needed to operate across web and Telegram channels.
+
+## My role
+
+I developed the Arabic RAG assistant, generated embeddings with Gemini models, implemented BigQuery vector retrieval, and created the intent-detection agent responsible for identifying conversations that need escalation.
+
+I also integrated the assistant with Telegram as an additional delivery channel.
+
+<h2 id="implementation">Retrieval and routing design</h2>
+
+The normal path retrieves semantically relevant rulings and uses them as context for an answer. A separate intent layer examines the request and conversation state for signals that the assistant should defer.
+
+When escalation is required, the system routes the conversation to a Mufti rather than producing an unjustifiably confident response. Treating human handoff as a product outcome, rather than an exception, shaped the architecture.
+
+<h2 id="evaluation">Evaluation and safeguards</h2>
+
+Evaluation needs to cover two distinct behaviors: answer quality when retrieval is appropriate and routing quality when human judgment is required. A system can retrieve well and still be unsafe if it fails to defer.
+
+Public details intentionally stop short of exposing internal routing categories or thresholds. The architectural principle is straightforward: uncertainty and sensitivity must be represented in the system's control flow.
+
+<h2 id="deployment">Production deployment</h2>
+
+The assistant uses Gemini-generated embeddings and BigQuery vector search within a Google Cloud environment. Channel integration is separated from retrieval and routing logic so the same core behavior can support multiple interfaces.
+
+<h2 id="results">Results and lessons</h2>
+
+The system delivered an Arabic domain assistant with an explicit scholar-escalation mechanism and Telegram integration.
+
+The key lesson was that human-in-the-loop design should begin with the handoff contract: what triggers escalation, what context travels with the request, and how the automated system communicates its limits.

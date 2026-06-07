@@ -1,0 +1,74 @@
+---
+title: "Fatwa Semantic Search"
+summary: "A production semantic search pipeline for a six-figure Arabic corpus, combining batch inference, vector retrieval, domain-aware processing, and cloud-native delivery."
+role: "AI Engineer"
+employer: "iHorizons"
+period: "2025 - Present"
+featuredRank: 1
+problem: "Make more than 165,000 Arabic religious rulings discoverable through meaning rather than exact keyword overlap, while preserving the integrity of Quranic text and supporting downstream audio experiences."
+scale: "165K+ Arabic fatwas"
+metrics:
+  - value: "165K+"
+    label: "documents processed"
+  - value: "5"
+    label: "managed GCP services"
+  - value: "Arabic"
+    label: "domain-first retrieval"
+capabilities:
+  - "Semantic search"
+  - "Batch inference"
+  - "Arabic NLP"
+technologies:
+  - "Python"
+  - "Gemini"
+  - "Vertex AI"
+  - "BigQuery Vector Search"
+  - "Cloud Run"
+  - "Cloud Storage"
+  - "Cloud Scheduler"
+confidentiality: "This case study presents a sanitized architecture based on publicly shareable responsibilities. Proprietary data, prompts, thresholds, and internal service details are omitted."
+diagramType: "retrieval"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+Traditional lexical search struggles when users phrase a question differently from the language used in an existing ruling. The system needed to improve semantic discovery across a large Arabic corpus while operating within a domain where wording, citations, and source integrity matter.
+
+The work extended beyond creating embeddings. It required a repeatable ingestion workflow, large-scale summarization, a vector retrieval layer, production scheduling, and domain-specific handling of Quranic passages.
+
+## Constraints
+
+- Arabic religious content required careful normalization without damaging meaning.
+- Quranic verses needed separate detection and processing under strict content rules.
+- Batch processing had to handle a six-figure corpus reliably.
+- Search infrastructure needed to fit an existing Google Cloud operating model.
+- The same corpus supported downstream experiences, including Arabic text-to-speech.
+
+## My role
+
+I developed the semantic search engine and production pipeline across ingestion, batch inference, indexing, retrieval, Quran detection, and cloud deployment. I also designed a scalable Arabic text-to-speech workflow that preserved domain-specific recitation requirements.
+
+<h2 id="implementation">Data and retrieval design</h2>
+
+The pipeline processes source records in controlled batches, produces model-assisted summaries, generates vector representations, and writes retrieval-ready records into BigQuery. Metadata remains attached to each item so downstream services can preserve source context.
+
+BigQuery-based vector search was selected to keep retrieval close to the broader data platform and simplify production operations. The public architecture intentionally omits proprietary chunking rules, prompt templates, and ranking thresholds.
+
+<h2 id="evaluation">Evaluation and safeguards</h2>
+
+Quality controls focused on preserving source text, separating Quranic content from ordinary prose, and inspecting retrieval behavior across varied Arabic queries. The production system includes domain-aware processing rather than treating all text as interchangeable.
+
+Exact benchmark values and internal acceptance thresholds are confidential. A future public companion project will demonstrate the evaluation pattern on a representative open dataset.
+
+<h2 id="deployment">Production deployment</h2>
+
+The system runs on Google Cloud using Cloud Run for services, BigQuery for data and vector retrieval, Cloud Storage for artifacts, Vertex AI for model workloads, and Cloud Scheduler for recurring execution.
+
+This managed-services approach reduced operational surface area while supporting repeatable batch jobs and independently deployable serving components.
+
+<h2 id="results">Results and lessons</h2>
+
+The delivered pipeline processed and indexed more than 165,000 fatwas and established a semantic retrieval foundation for IslamWeb product experiences.
+
+The central lesson was that production semantic search is primarily a data and evaluation system. Embedding generation is one component; corpus preparation, metadata, domain rules, repeatability, and failure recovery determine whether the system is useful.

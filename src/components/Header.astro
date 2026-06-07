@@ -1,0 +1,51 @@
+---
+import Icon from "./Icon.astro";
+import { siteConfig } from "../config/site";
+
+const currentPath = Astro.url.pathname;
+const links = [
+  { label: "Experience", href: "/experience/" },
+  { label: "Projects", href: "/work/" },
+  { label: "About", href: "/about/" }
+];
+---
+<header class="site-header">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="shell nav-shell">
+    <a class="brand" href="/" aria-label="Mohamed Rayen Fekih, home">
+      <span class="brand-mark">RF</span>
+      <span class="brand-name">Rayen Fekih</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            aria-current={currentPath.startsWith(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="nav-actions">
+      <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span class="theme-icon theme-icon-sun"><Icon name="sun" /></span>
+        <span class="theme-icon theme-icon-moon"><Icon name="moon" /></span>
+      </button>
+      <a class="button button-small" href={siteConfig.cvPath} download>Download CV</a>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  const root = document.documentElement;
+  const storedTheme = localStorage.getItem("theme");
+  const preferredTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  root.dataset.theme = storedTheme || preferredTheme;
+  document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    localStorage.setItem("theme", next);
+  });
+</script>

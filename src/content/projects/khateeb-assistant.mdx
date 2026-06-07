@@ -1,0 +1,72 @@
+---
+title: "Khateeb Assistant"
+summary: "A multi-agent workflow that turns sermon requirements into grounded Arabic drafts, with specialist agents, retrieval over trusted sources, and an LLM-as-judge quality gate."
+role: "AI Engineer"
+employer: "iHorizons"
+period: "2025 - Present"
+featuredRank: 2
+problem: "Support Friday sermon preparation with an agentic workflow that can interpret a Khateeb's requirements, retrieve trusted references, generate coherent Arabic content, and apply domain-specific review before delivery."
+scale: "Multi-source Arabic knowledge base"
+metrics:
+  - value: "4"
+    label: "specialist agent roles"
+  - value: "RAG"
+    label: "grounded generation"
+  - value: "Judge"
+    label: "automated review layer"
+capabilities:
+  - "Multi-agent systems"
+  - "LLM evaluation"
+  - "Grounded generation"
+technologies:
+  - "n8n"
+  - "Google RAG Engine"
+  - "Gemini"
+  - "Vertex AI"
+  - "Python"
+confidentiality: "The workflow shown here is a sanitized functional view. Internal prompts, source collections, evaluation rubrics, and operational thresholds are not disclosed."
+diagramType: "agents"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+Sermon generation is not a conventional text-generation task. A useful system must understand the speaker's requirements, ground its output in trusted references, organize a coherent argument, and respect sensitive religious constraints.
+
+The solution was designed as a collaborative workflow rather than a single prompt. Each stage has a defined responsibility and produces an artifact that can be reviewed by the next stage.
+
+## Constraints
+
+- Source material spans Quranic verses, Hadith, and Arabic Islamic books.
+- Generated text must remain grounded in trusted references.
+- Requirements vary by topic, audience, length, and intended message.
+- Quality cannot be judged by fluency alone.
+- Human accountability remains essential for final use.
+
+## My role
+
+I built the multi-agent workflow in n8n, prepared the source material for retrieval through Google RAG Engine, and implemented the collaborating requirement-extraction, generation, moderation, and summarization agents.
+
+I also developed the LLM-as-judge layer used to assess whether a draft satisfies the Khateeb's requirements and domain rules.
+
+<h2 id="implementation">Agent and retrieval design</h2>
+
+The workflow begins by turning an open-ended request into structured requirements. Retrieval then supplies relevant source material to the generation stage. A moderator reviews the draft for alignment and a summarizer produces a concise representation for review and downstream handling.
+
+The agents exchange bounded artifacts rather than relying on an unstructured conversation. This makes responsibilities easier to inspect and reduces the chance that one model call silently performs incompatible tasks.
+
+<h2 id="evaluation">Evaluation and safeguards</h2>
+
+The evaluation layer uses an LLM as a structured reviewer, checking the draft against both the extracted requirements and a domain-specific rubric. The judge is a quality signal, not a substitute for accountable human review.
+
+The architecture separates generation from evaluation to reduce self-approval bias and make failures easier to diagnose. Exact rubrics and thresholds remain confidential.
+
+<h2 id="deployment">Production deployment</h2>
+
+n8n provides visible orchestration across agents and model calls, while Google RAG Engine supplies managed retrieval over the prepared knowledge sources. The workflow is designed so individual stages can be observed and revised without replacing the entire system.
+
+<h2 id="results">Results and lessons</h2>
+
+The result is a grounded multi-agent assistant for a safety-sensitive generation workflow. Its main engineering value is the separation of concerns: requirements, evidence, generation, moderation, and evaluation remain explicit.
+
+The strongest lesson was that additional agents only help when their contracts are clear. Agent count is not sophistication; inspectable responsibilities and evaluation boundaries are.
