@@ -18,3 +18,8 @@ npm install
 npm run dev
 npm run build
 npm run preview
+```
+
+## Updating Content
+
+See [CONTENT_MAP.md](CONTENT_MAP.md) for a section-by-section guide to editing the homepage, experience, projects, skills, contact details, colors, and downloadable CV.

@@ -38,7 +38,7 @@ const skills = [
         "@type": "Person",
         name: "Mohamed Rayen Fekih",
         alternateName: "Rayen Fekih",
-        jobTitle: "AI / Machine Learning Engineer",
+        jobTitle: "Senior AI / Machine Learning Engineer",
         url: "https://rayenfekih.github.io",
         email: "mailto:rayen.fekih6@gmail.com",
         sameAs: [
@@ -52,7 +52,7 @@ const skills = [
 
   <section class="cv-hero shell">
     <h1>Mohamed Rayen Fekih</h1>
-    <p class="cv-role">AI / Machine Learning Engineer</p>
+    <p class="cv-role">Senior AI / Machine Learning Engineer</p>
     <p class="cv-summary">
       AI Engineer with experience building GenAI, RAG, semantic search, recommendation,
       forecasting, and pricing systems. I focus on turning applied AI projects into
@@ -60,9 +60,9 @@ const skills = [
     </p>
     <div class="button-row cv-actions">
       <a class="button" href={siteConfig.cvPath} download>Download CV <Icon name="download" /></a>
-      <a class="button button-secondary" href="https://www.linkedin.com/in/rayen-fekih/">LinkedIn <Icon name="external" /></a>
+      <a class="button button-secondary" href="https://www.linkedin.com/in/rayen-fekih/" target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="external" /></a>
       <a class="button button-secondary" href="mailto:rayen.fekih6@gmail.com">Email <Icon name="mail" /></a>
-      <a class="button button-secondary" href="https://github.com/RayenFekih">GitHub <Icon name="external" /></a>
+      <a class="button button-secondary" href="https://github.com/RayenFekih" target="_blank" rel="noopener noreferrer">GitHub <Icon name="external" /></a>
     </div>
   </section>
 
@@ -120,45 +120,45 @@ const skills = [
     </div>
   </section>
 
-  <section class="cv-section shell" id="projects">
+  <section class="cv-section shell" id="skills">
     <div class="cv-section-heading">
-      <p class="eyebrow">Portfolio</p>
-      <h2>Selected Projects</h2>
-      <p>Detailed case studies for selected GenAI and machine learning projects.</p>
+      <p class="eyebrow">Technical profile</p>
+      <h2>Skills</h2>
     </div>
-    <div class="selected-project-links">
-      {experience.flatMap((job) =>
-        job.projects
-          .filter((project) => project.href)
-          .map((project) => (
-            <a class="selected-project-link" href={project.href}>
-              <span>
-                <small>{job.company}</small>
-                <strong>{project.title}</strong>
-                <p>{project.description}</p>
-              </span>
-              <span aria-hidden="true">→</span>
-            </a>
-          ))
-      )}
+    <div class="skills-grid">
+      {skills.map((group) => (
+        <article class="skill-group">
+          <h3>{group.title}</h3>
+          <div class="tag-row">
+            {group.items.map((item) => <span>{item}</span>)}
+          </div>
+        </article>
+      ))}
     </div>
   </section>
 
-  <section class="cv-section section-toned" id="skills">
+  <section class="cv-section section-toned" id="projects">
     <div class="shell">
       <div class="cv-section-heading">
-        <p class="eyebrow">Technical profile</p>
-        <h2>Skills</h2>
+        <p class="eyebrow">Portfolio</p>
+        <h2>Selected Projects</h2>
+        <p>Detailed case studies for selected GenAI and machine learning projects.</p>
       </div>
-      <div class="skills-grid">
-        {skills.map((group) => (
-          <article class="skill-group">
-            <h3>{group.title}</h3>
-            <div class="tag-row">
-              {group.items.map((item) => <span>{item}</span>)}
-            </div>
-          </article>
-        ))}
+      <div class="selected-project-links">
+        {experience.flatMap((job) =>
+          job.projects
+            .filter((project) => project.href)
+            .map((project) => (
+              <a class="selected-project-link" href={project.href}>
+                <span>
+                  <small>{job.company}</small>
+                  <strong>{project.title}</strong>
+                  <p>{project.description}</p>
+                </span>
+                <span aria-hidden="true">→</span>
+              </a>
+            ))
+        )}
       </div>
     </div>
   </section>
@@ -189,8 +189,8 @@ const skills = [
       </div>
       <div class="contact-links">
         <a href="mailto:rayen.fekih6@gmail.com">rayen.fekih6@gmail.com <span>↗</span></a>
-        <a href="https://www.linkedin.com/in/rayen-fekih/">LinkedIn <span>↗</span></a>
-        <a href="https://github.com/RayenFekih">GitHub <span>↗</span></a>
+        <a href="https://www.linkedin.com/in/rayen-fekih/" target="_blank" rel="noopener noreferrer">LinkedIn <span>↗</span></a>
+        <a href="https://github.com/RayenFekih" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a>
       </div>
     </div>
   </section>
