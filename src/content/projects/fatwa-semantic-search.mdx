@@ -1,19 +1,18 @@
 ---
 title: "Fatwa Semantic Search"
-summary: "A production semantic search pipeline for a six-figure Arabic corpus, combining batch inference, vector retrieval, domain-aware processing, and cloud-native delivery."
+summary: "A production semantic search pipeline for the Qatar Ministry of Awqaf and Islamic Affairs, powering discovery across a six-figure Arabic corpus on the IslamWeb platform."
 role: "AI Engineer"
 employer: "iHorizons"
+client: "Qatar Ministry of Awqaf and Islamic Affairs"
 period: "2025 - Present"
 featuredRank: 1
-problem: "Make more than 165,000 Arabic religious rulings discoverable through meaning rather than exact keyword overlap, while preserving the integrity of Quranic text and supporting downstream audio experiences."
-scale: "165K+ Arabic fatwas"
+problem: "Make more than 165,000 Arabic religious rulings discoverable through meaning rather than exact keyword overlap for a government platform serving an average of more than 10 million monthly visits, while preserving Quranic text integrity and supporting audio experiences."
+scale: "165K+ fatwas on the 10M+ monthly-visit IslamWeb platform"
 metrics:
+  - value: "10M+"
+    label: "average monthly visits to IslamWeb"
   - value: "165K+"
-    label: "documents processed"
-  - value: "5"
-    label: "managed GCP services"
-  - value: "Arabic"
-    label: "domain-first retrieval"
+    label: "fatwas processed and indexed"
 capabilities:
   - "Semantic search"
   - "Batch inference"
@@ -28,12 +27,16 @@ technologies:
   - "Cloud Scheduler"
 confidentiality: "This case study presents a sanitized architecture based on publicly shareable responsibilities. Proprietary data, prompts, thresholds, and internal service details are omitted."
 diagramType: "retrieval"
+externalUrl: "https://fatwatok.islamweb.net/"
+externalLabel: "Visit FatwaTok"
 draft: false
 ---
 
 <h2 id="context">Context</h2>
 
-Traditional lexical search struggles when users phrase a question differently from the language used in an existing ruling. The system needed to improve semantic discovery across a large Arabic corpus while operating within a domain where wording, citations, and source integrity matter.
+FatwaTok is an IslamWeb product delivered for the Qatar Ministry of Awqaf and Islamic Affairs. The wider IslamWeb platform receives an approved average of more than 10 million monthly visits, while this project's retrieval corpus contains more than 165,000 fatwas. These figures represent platform reach and indexed content scale respectively.
+
+Traditional lexical search struggles when users phrase a question differently from the language used in an existing ruling. The system needed to improve semantic discovery across this large Arabic corpus while operating within a domain where wording, citations, and source integrity matter.
 
 The work extended beyond creating embeddings. It required a repeatable ingestion workflow, large-scale summarization, a vector retrieval layer, production scheduling, and domain-specific handling of Quranic passages.
 
@@ -69,6 +72,6 @@ This managed-services approach reduced operational surface area while supporting
 
 <h2 id="results">Results and lessons</h2>
 
-The delivered pipeline processed and indexed more than 165,000 fatwas and established a semantic retrieval foundation for IslamWeb product experiences.
+The delivered pipeline processed and indexed more than 165,000 fatwas and established the semantic retrieval foundation used by FatwaTok on the IslamWeb platform, which averages more than 10 million monthly visits.
 
 The central lesson was that production semantic search is primarily a data and evaluation system. Embedding generation is one component; corpus preparation, metadata, domain rules, repeatability, and failure recovery determine whether the system is useful.

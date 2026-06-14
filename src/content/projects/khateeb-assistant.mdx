@@ -1,19 +1,18 @@
 ---
 title: "Khateeb Assistant"
-summary: "A multi-agent workflow that turns sermon requirements into grounded Arabic drafts, with specialist agents, retrieval over trusted sources, and an LLM-as-judge quality gate."
+summary: "A government-sector multi-agent workflow where specialist agents collaborate to turn sermon requirements into grounded Arabic drafts for Khateebs across Qatar."
 role: "AI Engineer"
 employer: "iHorizons"
+client: "Qatar Ministry of Awqaf and Islamic Affairs"
 period: "2025 - Present"
 featuredRank: 2
-problem: "Support Friday sermon preparation with an agentic workflow that can interpret a Khateeb's requirements, retrieve trusted references, generate coherent Arabic content, and apply domain-specific review before delivery."
-scale: "Multi-source Arabic knowledge base"
+problem: "Support Friday sermon preparation across an intended scope of more than 1,000 Qatar mosques through collaborating agents that interpret requirements, retrieve trusted references, generate Arabic content, moderate drafts, summarize results, and evaluate quality."
+scale: "Intended to support Khateebs across 1,000+ Qatar mosques"
 metrics:
-  - value: "4"
-    label: "specialist agent roles"
-  - value: "RAG"
-    label: "grounded generation"
-  - value: "Judge"
-    label: "automated review layer"
+  - value: "1,000+"
+    label: "mosques in the intended Qatar support scope"
+  - value: "4+"
+    label: "collaborating specialist agent roles"
 capabilities:
   - "Multi-agent systems"
   - "LLM evaluation"
@@ -31,9 +30,11 @@ draft: false
 
 <h2 id="context">Context</h2>
 
+The Khateeb Assistant is being developed for the Qatar Ministry of Awqaf and Islamic Affairs, with the intended scope of assisting Khateebs serving more than 1,000 mosques across Qatar. This is a target support scope rather than a claim of completed deployment or current adoption.
+
 Sermon generation is not a conventional text-generation task. A useful system must understand the speaker's requirements, ground its output in trusted references, organize a coherent argument, and respect sensitive religious constraints.
 
-The solution was designed as a collaborative workflow rather than a single prompt. Each stage has a defined responsibility and produces an artifact that can be reviewed by the next stage.
+The solution was designed as a collaborative multi-agent workflow rather than a single prompt. Specialist agents handle requirement extraction, retrieval, generation, moderation, summarization, and evaluation, with each stage producing an artifact that can be reviewed by the next.
 
 ## Constraints
 
@@ -45,7 +46,7 @@ The solution was designed as a collaborative workflow rather than a single promp
 
 ## My role
 
-I built the multi-agent workflow in n8n, prepared the source material for retrieval through Google RAG Engine, and implemented the collaborating requirement-extraction, generation, moderation, and summarization agents.
+I built the multi-agent workflow in n8n, prepared the source material for retrieval through Google RAG Engine, and implemented the collaborating requirement-extraction, retrieval, generation, moderation, and summarization agents.
 
 I also developed the LLM-as-judge layer used to assess whether a draft satisfies the Khateeb's requirements and domain rules.
 
@@ -67,6 +68,6 @@ n8n provides visible orchestration across agents and model calls, while Google R
 
 <h2 id="results">Results and lessons</h2>
 
-The result is a grounded multi-agent assistant for a safety-sensitive generation workflow. Its main engineering value is the separation of concerns: requirements, evidence, generation, moderation, and evaluation remain explicit.
+The result is a grounded multi-agent assistant designed to support Khateebs across an intended scope of more than 1,000 Qatar mosques. Its main engineering value is the separation of concerns: requirements, evidence, generation, moderation, summarization, and evaluation remain explicit.
 
 The strongest lesson was that additional agents only help when their contracts are clear. Agent count is not sophistication; inspectable responsibilities and evaluation boundaries are.

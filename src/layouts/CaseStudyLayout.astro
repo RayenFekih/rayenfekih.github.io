@@ -16,6 +16,7 @@ const { data } = project;
       "@type": "CreativeWork",
       name: data.title,
       description: data.summary,
+      ...(data.externalUrl ? { url: data.externalUrl } : {}),
       author: {
         "@type": "Person",
         name: "Mohamed Rayen Fekih",
@@ -31,9 +32,15 @@ const { data } = project;
           <p class="eyebrow">{data.employer} · {data.period}</p>
           <h1>{data.title}</h1>
           <p class="case-summary">{data.summary}</p>
+          {data.externalUrl && (
+            <a class="button case-external-link" href={data.externalUrl} target="_blank" rel="noopener noreferrer">
+              {data.externalLabel ?? "Visit live project"} <span aria-hidden="true">↗</span>
+            </a>
+          )}
         </div>
         <dl class="case-facts">
           <div><dt>Role</dt><dd>{data.role}</dd></div>
+          {data.client && <div><dt>Client</dt><dd>{data.client}</dd></div>}
           <div><dt>Scale</dt><dd>{data.scale}</dd></div>
           <div><dt>Focus</dt><dd>{data.capabilities.join(" · ")}</dd></div>
         </dl>

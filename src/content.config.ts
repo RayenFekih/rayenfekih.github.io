@@ -9,6 +9,7 @@ const projects = defineCollection({
     summary: z.string(),
     role: z.string(),
     employer: z.string(),
+    client: z.string().optional(),
     period: z.string(),
     featuredRank: z.number(),
     problem: z.string(),
@@ -18,6 +19,8 @@ const projects = defineCollection({
     technologies: z.array(z.string()),
     confidentiality: z.string(),
     diagramType: z.enum(["retrieval", "agents", "human-loop", "graph"]),
+    externalUrl: z.url().optional(),
+    externalLabel: z.string().optional(),
     draft: z.boolean().default(false)
   })
 });

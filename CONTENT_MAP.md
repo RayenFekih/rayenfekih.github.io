@@ -75,16 +75,28 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
       description: "What the system does and why it matters.",
       contribution: "Your specific contribution.",
       technologies: ["Python", "GCP"],
-      metric: "Optional project-specific result",
+      client: "Optional public client name",
+      metrics: [
+        {
+          value: "165K+",
+          label: "fatwas processed and indexed",
+        },
+      ],
       href: "/work/project-slug/",
+      externalUrl: "https://example.com/",
+      externalLabel: "Visit live project",
     },
   ],
 }
 ```
 
-- Remove `metric` when no public, defensible result is available.
+- Remove `metrics` when no public, defensible result is available.
+- Keep each metric tied to the project and label whether it represents product reach, engineering scale, a target scope, or a measured result.
+- Use `client` only when the organization name is approved for public use.
 - Add `href` only when a detailed case-study page exists.
+- Add `externalUrl` and `externalLabel` only when a public product or demonstration exists. External links open in a new tab.
 - Projects without an `href` still appear under their company, but not in Selected Projects.
+- Project order in this array controls the order on the homepage, Work page, and Experience page.
 - Keep confidential employer details generalized or sanitized.
 
 ## Detailed Case Studies
@@ -96,7 +108,15 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 | Khateeb Assistant | `src/content/projects/khateeb-assistant.mdx` |
 | GenAI Assistant Agent | `src/content/projects/genai-assistant-agent.mdx` |
 
-Each MDX file contains frontmatter at the top for card metadata and Markdown below it for the full case study. Project titles, summaries, and technologies may appear both in the MDX file and `experience.ts`; update both when changing shared facts.
+Each MDX file contains frontmatter at the top for case-study metadata and Markdown below it for the full narrative. Project titles, summaries, clients, metrics, technologies, and external product links may appear both in the MDX file and `experience.ts`; update both when changing shared facts.
+
+Optional case-study frontmatter fields include:
+
+```yaml
+client: "Public client name"
+externalUrl: "https://example.com/"
+externalLabel: "Visit live project"
+```
 
 To add a case study:
 

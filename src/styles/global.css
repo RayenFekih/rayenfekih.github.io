@@ -1116,7 +1116,7 @@ h3 {
 }
 
 .case-metrics {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   margin-top: 50px;
   border: 1px solid var(--line);
 }
@@ -1368,7 +1368,7 @@ h3 {
 
 .role-project-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 155px;
+  grid-template-columns: minmax(0, 1fr) 190px;
   gap: 28px;
   padding: 25px 27px;
   border: 1px solid var(--line);
@@ -1402,6 +1402,11 @@ h3 {
   color: var(--muted);
 }
 
+.project-client {
+  color: var(--muted);
+}
+
+.project-client strong,
 .project-contribution strong {
   color: var(--text);
 }
@@ -1410,13 +1415,22 @@ h3 {
   margin-block: 16px;
 }
 
-.project-metric {
+.project-metrics {
   align-self: stretch;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding-left: 25px;
   border-left: 1px solid var(--line);
+}
+
+.project-metric {
+  padding-block: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.project-metric:last-child {
+  border-bottom: 0;
 }
 
 .project-metric strong {
@@ -1432,6 +1446,20 @@ h3 {
 
 .section-end-link {
   margin-top: 30px;
+}
+
+.inline-project-link {
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.inline-project-link:hover {
+  text-decoration: underline;
+}
+
+.case-external-link {
+  margin-top: 25px;
 }
 
 .selected-project-links {
@@ -1462,6 +1490,13 @@ h3 {
   color: var(--accent);
   font: 500 12px var(--mono);
   text-transform: uppercase;
+}
+
+.selected-project-client {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--faint);
+  font-size: 12px;
 }
 
 .selected-project-link strong {
@@ -1580,7 +1615,7 @@ h3 {
 
 .experience-project-list>article {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 155px;
+  grid-template-columns: minmax(0, 1fr) 190px;
   gap: 25px;
   padding: 23px;
   border: 1px solid var(--line);
@@ -1746,7 +1781,7 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .project-metric {
+  .project-metrics {
     padding: 18px 0 0;
     border-top: 1px solid var(--line);
     border-left: 0;
