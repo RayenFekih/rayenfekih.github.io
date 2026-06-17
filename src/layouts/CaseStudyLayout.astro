@@ -61,6 +61,12 @@ const { data } = project;
           <a href="#results">Results</a>
         </nav>
         <p class="confidentiality">{data.confidentiality}</p>
+        <section class="case-sidebar-tech" aria-labelledby="case-technology">
+          <p class="eyebrow" id="case-technology">Technology</p>
+          <div class="tag-row">
+            {data.technologies.map((technology) => <span>{technology}</span>)}
+          </div>
+        </section>
       </aside>
       <div class="case-content prose">
         <section class="case-lead">
@@ -71,12 +77,6 @@ const { data } = project;
           <ArchitectureDiagram type={data.diagramType} label={`${data.title} architecture`} />
         </section>
         <slot />
-        <section class="technology-section">
-          <h2>Technology</h2>
-          <div class="tag-row">
-            {data.technologies.map((technology) => <span>{technology}</span>)}
-          </div>
-        </section>
       </div>
     </div>
   </article>

@@ -166,6 +166,25 @@ Edit `src/styles/global.css`. The main color variables are defined near the top:
 
 Most component styles are also centralized in this file. Search for the visible class name from the Astro page when adjusting a specific section.
 
+### Case Study Page Scale
+
+The shared project case-study layout is controlled mostly by `src/styles/global.css`:
+
+| Visible element | CSS selector to edit |
+| --- | --- |
+| Case-study title size | `.case-hero h1` |
+| Hero summary text | `.case-summary` |
+| Role/client/scale/focus facts | `.case-facts dt` and `.case-facts dd` |
+| Metrics row spacing and number size | `.metric-row > div`, `.metric-row strong`, `.metric-row span` |
+| Left-side page navigation | `.case-aside nav a` |
+| Confidentiality note | `.confidentiality` |
+| Sidebar technology tags | `.case-sidebar-tech` and `.case-sidebar-tech .tag-row span` |
+| Blue project-summary callout | `.case-lead` and `.case-lead p:last-child` |
+| Main section headings | `.prose h2` |
+| Main article body text | `.prose p, .prose li` |
+
+These selectors affect all case-study pages under `/work/`. For project-specific text, edit the matching MDX file in `src/content/projects/`.
+
 ## Deployment
 
 The GitHub Pages workflow is in `.github/workflows/deploy.yml`. It installs Node dependencies, runs the Astro build, uploads `dist`, and deploys that static artifact to GitHub Pages.

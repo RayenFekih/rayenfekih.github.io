@@ -18,7 +18,7 @@ const projects = defineCollection({
     capabilities: z.array(z.string()),
     technologies: z.array(z.string()),
     confidentiality: z.string(),
-    diagramType: z.enum(["retrieval", "agents", "human-loop", "graph"]),
+    diagramType: z.enum(["retrieval", "agents", "human-loop", "graph", "content-pipeline"]),
     externalUrl: z.url().optional(),
     externalLabel: z.string().optional(),
     draft: z.boolean().default(false)

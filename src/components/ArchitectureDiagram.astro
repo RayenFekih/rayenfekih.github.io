@@ -3,8 +3,17 @@ const { type, label = "Sanitized system architecture" } = Astro.props;
 
 const diagrams = {
   retrieval: {
-    nodes: ["Source corpus", "Batch processing", "Embeddings", "Vector index", "Search API"],
-    accent: 3
+    nodes: [
+      "User query",
+      "Gibberish detection",
+      "Embedding retrieval",
+      "Keyword retrieval",
+      "Hybrid ranking",
+      "Validation Agent",
+      "Summarize selected fatwas",
+      "Return retrieved fatwas"
+    ],
+    accent: 4
   },
   agents: {
     nodes: ["Requirements", "Planner agent", "Retrieval", "Generator", "Evaluator"],
@@ -17,6 +26,18 @@ const diagrams = {
   graph: {
     nodes: ["User request", "Graph router", "Tools", "Memory", "Response"],
     accent: 1
+  },
+  "content-pipeline": {
+    nodes: [
+      "Fetch new fatwas",
+      "Generate embeddings",
+      "Flag sensitive content",
+      "Summarize fatwas",
+      "TTS audios generation",
+      "Generate BM25 artifacts",
+      "Publish processed outputs"
+    ],
+    accent: 6
   }
 };
 const diagram = diagrams[type as keyof typeof diagrams];
