@@ -1,30 +1,32 @@
 ---
 title: "Fatwa Semantic Search"
-summary: "A production semantic search pipeline for the Qatar Ministry of Awqaf and Islamic Affairs, powering discovery across a six-figure Arabic corpus on the IslamWeb platform."
-role: "AI Engineer"
+summary: "A large-scale Arabic search system for IslamWeb's fatwa corpus, combining semantic search, keyword retrieval, and rank fusion to improve discovery across more than 165,000 Arabic fatwas."
+role: "Senior AI Engineer"
 employer: "iHorizons"
 client: "Qatar Ministry of Awqaf and Islamic Affairs"
 period: "2025 - Present"
 featuredRank: 1
-problem: "Make more than 165,000 Arabic religious rulings discoverable through meaning rather than exact keyword overlap for a government platform serving an average of more than 10 million monthly visits, while preserving Quranic text integrity and supporting audio experiences."
+problem: "Traditional keyword search often struggles with natural language queries, paraphrasing, and vocabulary differences. To improve retrieval quality, I designed a hybrid search pipeline that combines Gemini embeddings, BM25 retrieval, and Reciprocal Rank Fusion (RRF). The project also included evaluation workflows, human-labeling tools, and ranking experiments to measure and improve search relevance."
 scale: "165K+ fatwas on the 10M+ monthly-visit IslamWeb platform"
 metrics:
+  - value: "165K+"
+    label: "searchable Arabic fatwas"
+  - value: "Hybrid"
+    label: "semantic and BM25 retrieval"
   - value: "10M+"
     label: "average monthly visits to IslamWeb"
-  - value: "165K+"
-    label: "fatwas processed and indexed"
 capabilities:
   - "Semantic search"
-  - "Batch inference"
-  - "Arabic NLP"
+  - "Hybrid retrieval"
+  - "Retrieval evaluation"
 technologies:
   - "Python"
-  - "Gemini"
-  - "Vertex AI"
+  - "Gemini Embeddings"
   - "BigQuery Vector Search"
-  - "Cloud Run"
-  - "Cloud Storage"
-  - "Cloud Scheduler"
+  - "BM25"
+  - "Hybrid Retrieval"
+  - "RRF"
+  - "Google Cloud"
 confidentiality: "This case study presents a sanitized architecture based on publicly shareable responsibilities. Proprietary data, prompts, thresholds, and internal service details are omitted."
 diagramType: "retrieval"
 externalUrl: "https://fatwatok.islamweb.net/"
@@ -36,42 +38,44 @@ draft: false
 
 FatwaTok is an IslamWeb product delivered for the Qatar Ministry of Awqaf and Islamic Affairs. The wider IslamWeb platform receives an approved average of more than 10 million monthly visits, while this project's retrieval corpus contains more than 165,000 fatwas. These figures represent platform reach and indexed content scale respectively.
 
-Traditional lexical search struggles when users phrase a question differently from the language used in an existing ruling. The system needed to improve semantic discovery across this large Arabic corpus while operating within a domain where wording, citations, and source integrity matter.
+The core question was: how do we retrieve the most relevant fatwa for a user query? Traditional keyword search is useful for exact terms, but it can miss relevant rulings when users phrase questions differently from the source wording. Semantic search improves meaning-based discovery, but it can miss precise lexical signals that matter in religious queries.
 
-The work extended beyond creating embeddings. It required a repeatable ingestion workflow, large-scale summarization, a vector retrieval layer, production scheduling, and domain-specific handling of Quranic passages.
+The resulting system combines both approaches. Gemini embeddings and BigQuery Vector Search support semantic retrieval, while BM25 preserves keyword-strength matching. Reciprocal Rank Fusion brings both result sets together into a single ranking that can be evaluated and improved.
 
 ## Constraints
 
-- Arabic religious content required careful normalization without damaging meaning.
-- Quranic verses needed separate detection and processing under strict content rules.
-- Batch processing had to handle a six-figure corpus reliably.
-- Search infrastructure needed to fit an existing Google Cloud operating model.
-- The same corpus supported downstream experiences, including Arabic text-to-speech.
+- Arabic user queries may be short, colloquial, or phrased differently from the source fatwa.
+- Exact religious terms and named concepts still need strong keyword matching.
+- Search quality needed measurable evaluation rather than relying on anecdotal checks.
+- Human review was needed to label relevance and inspect difficult query cases.
+- The retrieval system had to run in a production Google Cloud environment.
 
 ## My role
 
-I developed the semantic search engine and production pipeline across ingestion, batch inference, indexing, retrieval, Quran detection, and cloud deployment. I also designed a scalable Arabic text-to-speech workflow that preserved domain-specific recitation requirements.
+I developed the retrieval system across embedding-based retrieval, BM25 keyword retrieval, hybrid ranking, evaluation workflows, human labeling support, LLM-assisted relevance review, and production deployment.
 
-<h2 id="implementation">Data and retrieval design</h2>
+<h2 id="implementation">Retrieval design</h2>
 
-The pipeline processes source records in controlled batches, produces model-assisted summaries, generates vector representations, and writes retrieval-ready records into BigQuery. Metadata remains attached to each item so downstream services can preserve source context.
+The retrieval design uses two complementary paths. The semantic path generates Gemini embeddings for fatwa records and retrieves nearest neighbors through BigQuery Vector Search. The keyword path uses BM25 to preserve lexical relevance for exact terms, religious concepts, and names.
 
-BigQuery-based vector search was selected to keep retrieval close to the broader data platform and simplify production operations. The public architecture intentionally omits proprietary chunking rules, prompt templates, and ranking thresholds.
+Results from both paths are merged with Reciprocal Rank Fusion. RRF was selected because it is simple to reason about, works well when combining heterogeneous rankers, and avoids forcing scores from different retrieval systems onto the same scale.
+
+The public architecture intentionally omits proprietary weighting, query handling rules, and ranking thresholds.
 
 <h2 id="evaluation">Evaluation and safeguards</h2>
 
-Quality controls focused on preserving source text, separating Quranic content from ordinary prose, and inspecting retrieval behavior across varied Arabic queries. The production system includes domain-aware processing rather than treating all text as interchangeable.
+Search quality was evaluated through a combination of human labeling and LLM-assisted relevance review. Human labels provided grounded judgments for representative queries, while model-assisted evaluation helped expand review coverage and identify weak retrieval patterns.
 
-Exact benchmark values and internal acceptance thresholds are confidential. A future public companion project will demonstrate the evaluation pattern on a representative open dataset.
+The evaluation framework focused on whether the returned fatwas answered the user's intent, not only whether they shared surface keywords. Exact benchmark values, labeled datasets, and acceptance thresholds remain confidential.
 
 <h2 id="deployment">Production deployment</h2>
 
-The system runs on Google Cloud using Cloud Run for services, BigQuery for data and vector retrieval, Cloud Storage for artifacts, Vertex AI for model workloads, and Cloud Scheduler for recurring execution.
+The retrieval system runs on Google Cloud, using BigQuery Vector Search for semantic retrieval and a keyword retrieval path for BM25 results. The serving layer exposes hybrid search behavior to the FatwaTok product experience.
 
-This managed-services approach reduced operational surface area while supporting repeatable batch jobs and independently deployable serving components.
+The deployment keeps retrieval close to the broader IslamWeb data platform while allowing search ranking behavior to be evaluated and iterated independently.
 
 <h2 id="results">Results and lessons</h2>
 
-The delivered pipeline processed and indexed more than 165,000 fatwas and established the semantic retrieval foundation used by FatwaTok on the IslamWeb platform, which averages more than 10 million monthly visits.
+The delivered retrieval system made more than 165,000 Arabic fatwas searchable through hybrid semantic and keyword retrieval for FatwaTok on the IslamWeb platform, which averages more than 10 million monthly visits.
 
-The central lesson was that production semantic search is primarily a data and evaluation system. Embedding generation is one component; corpus preparation, metadata, domain rules, repeatability, and failure recovery determine whether the system is useful.
+The central lesson was that production search quality depends on retrieval strategy and evaluation discipline. Embeddings are valuable, but real improvement comes from combining retrieval signals, reviewing failures, and building a repeatable relevance-evaluation loop.

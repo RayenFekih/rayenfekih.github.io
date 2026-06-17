@@ -1,0 +1,81 @@
+---
+title: "Fatwa Content Processing Pipeline"
+summary: "A scheduled daily production workflow responsible for enriching, classifying, indexing, and generating audio for a corpus of more than 165,000 Arabic religious documents."
+role: "Senior AI Engineer"
+employer: "iHorizons"
+client: "Qatar Ministry of Awqaf and Islamic Affairs"
+period: "2025 - Present"
+featuredRank: 2
+problem: "Continuously process and enrich a large Arabic knowledge corpus at scale so downstream IslamWeb services can use fresh, classified, searchable, and audio-ready fatwa content."
+scale: "165K+ Arabic religious documents"
+metrics:
+  - value: "165K+"
+    label: "Arabic religious documents processed"
+  - value: "Daily"
+    label: "scheduled content synchronization"
+  - value: "Arabic"
+    label: "long-form TTS and Quran-aware processing"
+capabilities:
+  - "Content enrichment"
+  - "Batch inference"
+  - "Workflow automation"
+technologies:
+  - "Python"
+  - "Gemini Batch Inference"
+  - "Google Cloud Scheduler"
+  - "Cloud Run"
+  - "Cloud Storage"
+  - "BigQuery"
+  - "Text-to-Speech"
+  - "BM25"
+confidentiality: "This case study presents a sanitized view of the pipeline responsibilities. Internal source-system contracts, classification rules, prompts, retry policies, and monitoring details are omitted."
+diagramType: "graph"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+IslamWeb's fatwa corpus is not a static dataset. New fatwas need to be detected, fetched, enriched, classified, indexed, and made available to downstream services without requiring manual operational work for every update.
+
+This project answers a different engineering question from search ranking: how do we continuously process and enrich a large Arabic knowledge corpus at scale? The daily workflow supports the broader FatwaTok and IslamWeb ecosystem by preparing content, metadata, audio, and search artifacts for production use.
+
+## Constraints
+
+- New fatwas needed to be detected and synchronized from source systems.
+- Long-form Arabic text required robust batch handling and retry behavior.
+- Enrichment workflows needed to support Gemini-based summarization and metadata generation.
+- Classification workflows needed to flag sensitive categories and identify modern fatwas.
+- Quran-related text required dedicated Arabic preparation and reference-handling logic.
+- Downstream services needed refreshed search artifacts and processed outputs on a reliable schedule.
+
+## My role
+
+I built the production content-processing pipeline across scheduled ingestion, source synchronization, Gemini batch inference, metadata generation, content classification, Arabic audio generation, Quran-aware processing, BM25 index artifact creation, retry handling, and cloud operations.
+
+<h2 id="implementation">Pipeline design</h2>
+
+The pipeline runs scheduled jobs that detect newly published fatwas, fetch the required source content, and synchronize processed outputs with downstream services. Google Cloud Scheduler triggers daily execution, while cloud services handle processing, storage, and publication of generated artifacts.
+
+Content enrichment includes Gemini batch summarization, automated metadata generation, and large-batch processing over the fatwa corpus. Classification workflows support sexual-content flagging, modern-fatwa classification, and other automated categorization paths used by downstream product logic.
+
+Arabic audio generation is handled as a large-scale text-to-speech workflow designed for long-form Arabic religious text. Quran-aware processing detects Quran verses, replaces Quran text with verse references where appropriate, and prepares Arabic text with tashkeel-sensitive handling before downstream use.
+
+The pipeline also generates BM25 search artifacts and publishes refreshed indexes so keyword retrieval remains aligned with the latest processed corpus.
+
+<h2 id="evaluation">Quality and safeguards</h2>
+
+Quality controls focus on repeatability, category correctness, text preparation, and safe handling of sensitive religious content. The pipeline separates enrichment, classification, audio generation, Quran processing, and search artifact publication so each workflow can be inspected and improved independently.
+
+Exact classification rules, prompts, thresholds, and review procedures are confidential. The public pattern is that production LLM workflows need operational checks around both model output quality and pipeline reliability.
+
+<h2 id="deployment">Production deployment</h2>
+
+The pipeline runs as a cloud-based automation workflow with daily scheduled execution, retry mechanisms, processing logs, and monitoring for recurring jobs. Cloud Storage and BigQuery hold intermediate and downstream-ready artifacts, while Cloud Run services handle production processing workloads.
+
+This architecture keeps recurring content operations automated while making failures visible enough to retry or investigate without blocking unrelated workflows.
+
+<h2 id="results">Results and lessons</h2>
+
+The pipeline processes and enriches a corpus of more than 165,000 Arabic religious documents, supporting content synchronization, classification, audio generation, Quran-aware preparation, and refreshed search artifacts for IslamWeb services.
+
+The main lesson was that production LLM systems often depend on workflow engineering around the model. Batch inference is only one part of the work; scheduling, retries, artifact publication, classification boundaries, Arabic text handling, and operational monitoring determine whether the system can keep running.

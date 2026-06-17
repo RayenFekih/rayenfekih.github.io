@@ -104,11 +104,19 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 | Project | File |
 | --- | --- |
 | Fatwa Semantic Search | `src/content/projects/fatwa-semantic-search.mdx` |
+| Fatwa Content Processing Pipeline | `src/content/projects/fatwa-content-processing-pipeline.mdx` |
 | IslamWeb RAG Chatbot | `src/content/projects/islamweb-rag-chatbot.mdx` |
 | Khateeb Assistant | `src/content/projects/khateeb-assistant.mdx` |
 | GenAI Assistant Agent | `src/content/projects/genai-assistant-agent.mdx` |
 
 Each MDX file contains frontmatter at the top for case-study metadata and Markdown below it for the full narrative. Project titles, summaries, clients, metrics, technologies, and external product links may appear both in the MDX file and `experience.ts`; update both when changing shared facts.
+
+The iHorizons projects are intentionally split by engineering scope:
+
+- `Fatwa Semantic Search`: retrieval quality, Gemini embeddings, BigQuery Vector Search, BM25, hybrid retrieval, RRF, and relevance evaluation.
+- `Fatwa Content Processing Pipeline`: synchronization, enrichment, classification, Arabic TTS, Quran-aware processing, BM25 artifact generation, and scheduled automation.
+- `IslamWeb RAG Chatbot`: Arabic RAG, conversation routing, and scholar escalation.
+- `Khateeb Assistant`: multi-agent sermon preparation and LLM-as-judge evaluation.
 
 Optional case-study frontmatter fields include:
 
