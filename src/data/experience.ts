@@ -70,16 +70,16 @@ export const experience: Experience[] = [
         href: "/work/fatwa-content-processing-pipeline/"
       },
       {
-        title: "Khateeb Assistant",
+        title: "Khateeb Multi-Agent Assistant",
         description:
-          "Multi-agent system in which specialist agents collaborate to support Friday sermon preparation from trusted Arabic sources.",
+          "A grounded Arabic sermon-generation assistant for Khateebs, using retrieval, specialist agents, moderation, and review loops to support Friday sermon preparation while preserving human accountability.",
         contribution:
-          "Implemented requirement extraction, retrieval, generation, moderation, summarization, and LLM-as-judge evaluation as explicit agent stages.",
-        technologies: ["Multi-agents", "n8n", "Google ADK", "Google RAG Engine", "Vertex AI", "Docker"],
+          "Built the n8n POC and helped move the production workflow to Google ADK and Agent Engine, separating requirement extraction, retrieval, drafting, moderation, revision, word-count adjustment, and human review.",
+        technologies: ["Google ADK", "Agent Engine", "Vertex AI", "Google RAG Engine", "Gemini", "n8n", "Arabic NLP", "Multi-Agent Workflows"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         metrics: [
           { value: "1,000+", label: "mosques in the intended Qatar support scope" },
-          { value: "4+", label: "collaborating specialist agent roles" }
+          { value: "4", label: "collaborating specialist agents" }
         ],
         href: "/work/khateeb-assistant/"
       },

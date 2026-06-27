@@ -30,6 +30,7 @@ npm run build
 | Site URL, email, social links, and CV path | `src/config/site.ts` |
 | Colors, typography, spacing, and responsive styles | `src/styles/global.css` |
 | CV file | `public/assets/cv/CV_Mohamed_Rayen_Fekih.pdf` |
+| Khateeb workflow diagram image | `public/assets/diagrams/khateeb-workflow.png` |
 
 ## Homepage
 
@@ -116,7 +117,7 @@ The iHorizons projects are intentionally split by engineering scope:
 - `Fatwa Semantic Search`: retrieval quality, Gemini embeddings, BigQuery Vector Search, BM25, hybrid retrieval, RRF, and relevance evaluation.
 - `Fatwa Content Processing Pipeline`: synchronization, enrichment, classification, Arabic TTS, Quran-aware processing, BM25 artifact generation, and scheduled automation.
 - `IslamWeb RAG Chatbot`: Arabic RAG, conversation routing, and scholar escalation.
-- `Khateeb Assistant`: multi-agent sermon preparation and LLM-as-judge evaluation.
+- `Khateeb Assistant`: grounded Arabic sermon preparation, trusted-reference retrieval, moderation/revision loops, word-count adjustment, ADK/Agent Engine production deployment, and human review.
 
 Optional case-study frontmatter fields include:
 
@@ -153,6 +154,16 @@ Replace this file while keeping the same filename:
 `public/assets/cv/CV_Mohamed_Rayen_Fekih.pdf`
 
 All Download CV links use the path defined in `src/config/site.ts`, so no code change is needed when the replacement keeps the same filename.
+
+## Diagram Images
+
+The Khateeb Assistant case-study diagram is a static image rendered by `src/components/ArchitectureDiagram.astro`.
+
+To update it later, replace this file while keeping the same filename:
+
+`public/assets/diagrams/khateeb-workflow.png`
+
+The component keeps the image wide and readable on desktop, and allows horizontal scrolling on smaller screens instead of shrinking the text too much.
 
 ## Colors And Typography
 

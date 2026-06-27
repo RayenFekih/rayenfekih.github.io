@@ -1,12 +1,12 @@
 ---
 title: "Khateeb Assistant"
-summary: "A government-sector multi-agent workflow where specialist agents collaborate to turn sermon requirements into grounded Arabic drafts for Khateebs across Qatar."
+summary: "A grounded Arabic sermon-generation assistant for Khateebs, using retrieval, specialist agents, moderation, and review loops to support Friday sermon preparation while preserving human accountability."
 role: "AI Engineer"
 employer: "iHorizons"
 client: "Qatar Ministry of Awqaf and Islamic Affairs"
 period: "2025 - Present"
 featuredRank: 2
-problem: "Support Friday sermon preparation across an intended scope of more than 1,000 Qatar mosques through collaborating agents that interpret requirements, retrieve trusted references, generate Arabic content, moderate drafts, summarize results, and evaluate quality."
+problem: "Support Friday sermon preparation through a grounded multi-agent workflow that extracts requirements, retrieves trusted Islamic references, drafts Arabic sermon content, evaluates religious and structural constraints, applies revisions, and prepares a final draft for human review."
 scale: "Intended to support Khateebs across 1,000+ Qatar mosques"
 metrics:
   - value: "1,000+"
@@ -14,17 +14,20 @@ metrics:
   - value: "4+"
     label: "collaborating specialist agent roles"
 capabilities:
-  - "Multi-agent systems"
-  - "LLM evaluation"
-  - "Grounded generation"
+  - "Multi-agent workflows"
+  - "Religious text moderation"
+  - "Human review"
 technologies:
-  - "n8n"
+  - "Google ADK"
+  - "Agent Engine"
+  - "Vertex AI"
   - "Google RAG Engine"
   - "Gemini"
-  - "Vertex AI"
-  - "Python"
-confidentiality: "The workflow shown here is a sanitized functional view. Internal prompts, source collections, evaluation rubrics, and operational thresholds are not disclosed."
-diagramType: "agents"
+  - "n8n"
+  - "Arabic NLP"
+  - "Multi-Agent Workflows"
+confidentiality: "The workflow shown here is a sanitized functional view. Internal prompts, source collections, evaluation rubrics, thresholds, and service details are not disclosed."
+diagramType: "khateeb-workflow"
 draft: false
 ---
 
@@ -32,42 +35,53 @@ draft: false
 
 The Khateeb Assistant is being developed for the Qatar Ministry of Awqaf and Islamic Affairs, with the intended scope of assisting Khateebs serving more than 1,000 mosques across Qatar. This is a target support scope rather than a claim of completed deployment or current adoption.
 
-Sermon generation is not a conventional text-generation task. A useful system must understand the speaker's requirements, ground its output in trusted references, organize a coherent argument, and respect sensitive religious constraints.
+The assistant supports sermon preparation. It is not presented as replacing Khateebs, and final human accountability remains essential.
 
-The solution was designed as a collaborative multi-agent workflow rather than a single prompt. Specialist agents handle requirement extraction, retrieval, generation, moderation, summarization, and evaluation, with each stage producing an artifact that can be reviewed by the next.
+Religious Arabic text generation is sensitive. A useful system must understand the speaker's requirements, ground its output in trusted references, handle references carefully, organize a coherent sermon, and apply moderation before a draft reaches human review.
+
+The solution was designed as a collaborative multi-agent workflow rather than a single prompt. Specialist agents handle requirement extraction, reference retrieval, outlining, sermon drafting, moderation, revision, word-count adjustment, and finalization.
 
 ## Constraints
 
 - Source material spans Quranic verses, Hadith, and Arabic Islamic books.
 - Generated text must remain grounded in trusted references.
 - Requirements vary by topic, audience, length, and intended message.
-- Quality cannot be judged by fluency alone.
+- Quality cannot be judged by fluency alone; religious grounding, structure, references, and moderation all matter.
+- Drafts may need modification, summarization, or extension before they are ready for review.
 - Human accountability remains essential for final use.
 
 ## My role
 
-I built the multi-agent workflow in n8n, prepared the source material for retrieval through Google RAG Engine, and implemented the collaborating requirement-extraction, retrieval, generation, moderation, and summarization agents.
+I built the original POC workflow in n8n, prepared trusted references for retrieval through Google RAG Engine, and implemented collaborating agents for requirement extraction, retrieval, drafting, moderation, revision, summarization, extension, and evaluation.
 
-I also developed the LLM-as-judge layer used to assess whether a draft satisfies the Khateeb's requirements and domain rules.
+For production readiness and security reasons, the deployment moved from the n8n POC into Google ADK and Agent Engine. I also developed the evaluation layer used to assess whether a draft satisfies the Khateeb's requirements, religious constraints, and structural rules.
 
 <h2 id="implementation">Agent and retrieval design</h2>
 
-The workflow begins by turning an open-ended request into structured requirements. Retrieval then supplies relevant source material to the generation stage. A moderator reviews the draft for alignment and a summarizer produces a concise representation for review and downstream handling.
+The workflow begins by turning open-ended user requirements into structured sermon requirements. Retrieval then supplies trusted references from Quran, Hadith, and Arabic Islamic books. An outline agent plans the sermon structure before a generation agent drafts Arabic sermon content.
+
+Generation is separated from moderation and evaluation. A moderator/evaluator agent reviews the draft against religious, structural, and requirement-based constraints. If issues are found, a modifier agent revises the draft and returns it to the moderation stage.
+
+The workflow also checks word count. If the draft is too long, a summarization agent condenses it; if it is too short, an extension agent expands it. The adjusted draft returns to the word-count check before finalization.
 
 The agents exchange bounded artifacts rather than relying on an unstructured conversation. This makes responsibilities easier to inspect and reduces the chance that one model call silently performs incompatible tasks.
 
 <h2 id="evaluation">Evaluation and safeguards</h2>
 
-The evaluation layer uses an LLM as a structured reviewer, checking the draft against both the extracted requirements and a domain-specific rubric. The judge is a quality signal, not a substitute for accountable human review.
+The evaluation layer is separate from generation. It checks the draft against extracted requirements, trusted references, moderation rules, structural constraints, and word-count requirements. This separation reduces self-approval bias and makes failures easier to diagnose.
 
-The architecture separates generation from evaluation to reduce self-approval bias and make failures easier to diagnose. Exact rubrics and thresholds remain confidential.
+Feedback loops are intentional. A draft can be modified, summarized, or extended before it becomes a final candidate. These automated checks are quality controls, not substitutes for accountable human review.
+
+Internal prompts, exact rubrics, thresholds, source configuration, and service details remain confidential.
 
 <h2 id="deployment">Production deployment</h2>
 
-n8n provides visible orchestration across agents and model calls, while Google RAG Engine supplies managed retrieval over the prepared knowledge sources. The workflow is designed so individual stages can be observed and revised without replacing the entire system.
+The POC was originally built in n8n because it made the agent workflow easy to prototype, inspect, and revise. For production deployment, the workflow moved to Google ADK and Agent Engine to support stronger security, production-readiness, and managed agent execution.
+
+Google RAG Engine supplies retrieval over trusted references, while Vertex AI and Gemini support the model workloads. The public description intentionally avoids internal node-level details.
 
 <h2 id="results">Results and lessons</h2>
 
-The result is a grounded multi-agent assistant designed to support Khateebs across an intended scope of more than 1,000 Qatar mosques. Its main engineering value is the separation of concerns: requirements, evidence, generation, moderation, summarization, and evaluation remain explicit.
+The result is a grounded multi-agent assistant designed to support Khateebs across an intended scope of more than 1,000 Qatar mosques. Its main engineering value is the separation of concerns: requirements, evidence, outlining, generation, moderation, revision, word-count adjustment, finalization, and human review remain explicit.
 
-The strongest lesson was that additional agents only help when their contracts are clear. Agent count is not sophistication; inspectable responsibilities and evaluation boundaries are.
+The strongest lesson was that additional agents only help when their contracts are clear. Agent count is not sophistication; inspectable responsibilities, feedback loops, and human accountability are.
