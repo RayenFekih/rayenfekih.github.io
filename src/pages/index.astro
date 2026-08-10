@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
 import { experience } from "../data/experience";
+import { projectCategoryOptions } from "../data/projectCategories";
 import { siteConfig } from "../config/site";
 
 const skills = [
@@ -63,6 +64,20 @@ const skills = [
       <a class="button button-secondary" href="https://github.com/RayenFekih" target="_blank" rel="noopener noreferrer">GitHub <Icon name="external" /></a>
     </div>
   </section>
+
+  <nav class="project-focus-selector shell" aria-labelledby="project-focus-title">
+    <div>
+      <p class="eyebrow">Project focus</p>
+      <h2 id="project-focus-title">Explore projects by area</h2>
+      <p>Choose an area to view the most relevant projects and case studies.</p>
+    </div>
+    <div class="project-focus-links">
+      {projectCategoryOptions.map((category) => (
+        <a href={`/work/?focus=${category.value}`}>{category.label}</a>
+      ))}
+      <a href="/work/">View all projects</a>
+    </div>
+  </nav>
 
   <section class="cv-section section-toned" id="experience">
     <div class="shell">

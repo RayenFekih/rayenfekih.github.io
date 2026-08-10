@@ -1,19 +1,39 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { experience } from "../../data/experience";
+import { projectCategoryLabels, projectCategoryOptions } from "../../data/projectCategories";
+
+const projectCount = experience.reduce((count, job) => count + job.projects.length, 0);
 ---
 <BaseLayout
   title="Selected Projects"
-  description="Selected GenAI and machine learning projects by Mohamed Rayen Fekih, grouped by employer."
+  description="Selected GenAI, computer vision, forecasting, clustering, recommendation, and machine learning projects by Mohamed Rayen Fekih, grouped by employer."
 >
   <header class="page-hero shell page-hero-compact">
     <p class="eyebrow">Portfolio</p>
     <h1>Selected Projects</h1>
-    <p>GenAI, semantic search, recommendations, pricing, forecasting, and optimization projects from my work experience.</p>
+    <p>GenAI, computer vision, recommendations, pricing, forecasting, and optimization projects from my work experience.</p>
   </header>
+  <section class="project-filter-shell shell" aria-labelledby="project-filter-heading">
+    <div class="project-filter-copy">
+      <div>
+        <p class="eyebrow">Filter projects</p>
+        <h2 id="project-filter-heading">Choose an area</h2>
+      </div>
+      <p data-project-count aria-live="polite">{projectCount} projects</p>
+    </div>
+    <div class="project-filter-controls" role="group" aria-label="Filter projects by area">
+      <button type="button" data-project-filter data-focus="all" aria-pressed="true">All Projects</button>
+      {projectCategoryOptions.map((category) => (
+        <button type="button" data-project-filter data-focus={category.value} aria-pressed="false">
+          {category.label}
+        </button>
+      ))}
+    </div>
+  </section>
   <section class="page-section shell grouped-projects">
     {experience.map((job) => (
-      <section class="project-employer-group">
+      <section class="project-employer-group" data-employer-group>
         <header>
           <div>
             <p class="eyebrow">{job.period}</p>
@@ -23,7 +43,7 @@ import { experience } from "../../data/experience";
         </header>
         <div class="role-projects">
           {job.projects.map((project) => (
-            <article class="role-project-card">
+            <article class="role-project-card" data-project-card data-categories={project.categories.join(" ")}>
               <div class="role-project-main">
                 <h3>{project.href ? <a href={project.href}>{project.title}</a> : project.title}</h3>
                 <p>
@@ -39,6 +59,9 @@ import { experience } from "../../data/experience";
                 </p>
                 {project.client && <p class="project-client"><strong>Client:</strong> {project.client}</p>}
                 <p class="project-contribution"><strong>Contribution:</strong> {project.contribution}</p>
+                <div class="project-category-row" aria-label="Project categories">
+                  {project.categories.map((category) => <span>{projectCategoryLabels[category]}</span>)}
+                </div>
                 <div class="tag-row compact-tags">
                   {project.technologies.map((technology) => <span>{technology}</span>)}
                 </div>
@@ -60,4 +83,54 @@ import { experience } from "../../data/experience";
       </section>
     ))}
   </section>
+
+  <script>
+    const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
+    const projectCards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
+    const employerGroups = Array.from(document.querySelectorAll<HTMLElement>("[data-employer-group]"));
+    const resultCount = document.querySelector<HTMLElement>("[data-project-count]");
+    const validFocuses = new Set(filterButtons.map((button) => button.dataset.focus).filter(Boolean));
+
+    const readFocus = () => {
+      const focus = new URL(window.location.href).searchParams.get("focus") ?? "all";
+      return validFocuses.has(focus) ? focus : "all";
+    };
+
+    const updateUrl = (focus: string) => {
+      const url = new URL(window.location.href);
+      if (focus === "all") url.searchParams.delete("focus");
+      else url.searchParams.set("focus", focus);
+      window.history.replaceState({}, "", url);
+    };
+
+    const applyFilter = (focus: string, syncUrl = false) => {
+      let visibleCount = 0;
+
+      projectCards.forEach((card) => {
+        const categories = (card.dataset.categories ?? "").split(" ");
+        const visible = focus === "all" || categories.includes(focus);
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      employerGroups.forEach((group) => {
+        group.hidden = !group.querySelector("[data-project-card]:not([hidden])");
+      });
+
+      filterButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.focus === focus));
+      });
+
+      if (resultCount) resultCount.textContent = `${visibleCount} ${visibleCount === 1 ? "project" : "projects"}`;
+      if (syncUrl) updateUrl(focus);
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => applyFilter(button.dataset.focus ?? "all", true));
+    });
+
+    const initialFocus = readFocus();
+    applyFilter(initialFocus, new URL(window.location.href).searchParams.get("focus") !== null && initialFocus === "all");
+    window.addEventListener("popstate", () => applyFilter(readFocus()));
+  </script>
 </BaseLayout>

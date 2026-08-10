@@ -21,6 +21,7 @@ npm run build
 | --- | --- |
 | Homepage text, section order, skills, education, and contact | `src/pages/index.astro` |
 | Work experience and project summaries | `src/data/experience.ts` |
+| Project category names and filter order | `src/data/projectCategories.ts` |
 | Detailed project case studies | `src/content/projects/*.mdx` |
 | About page | `src/pages/about/index.astro` |
 | Experience page | `src/pages/experience/index.astro` |
@@ -39,6 +40,7 @@ The homepage is assembled in `src/pages/index.astro`.
 | Visible section | What to edit |
 | --- | --- |
 | Hero | Name, job title, short summary, and action links near the top of the page |
+| Project Focus Selector | Links to filtered project views; category names come from `src/data/projectCategories.ts` |
 | Work Experience | Layout is in the homepage; role and project content comes from `src/data/experience.ts` |
 | Skills | Edit the `skills` array near the top of the file |
 | Selected Projects | Automatically includes projects from `experience.ts` that have an `href` |
@@ -48,11 +50,12 @@ The homepage is assembled in `src/pages/index.astro`.
 Current homepage order:
 
 1. Hero
-2. Work Experience
-3. Skills
-4. Selected Projects
-5. Education
-6. Contact
+2. Project Focus Selector
+3. Work Experience
+4. Skills
+5. Selected Projects
+6. Education
+7. Contact
 
 To reorder sections, move the corresponding `<section>` block in `src/pages/index.astro`.
 
@@ -76,6 +79,7 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
       description: "What the system does and why it matters.",
       contribution: "Your specific contribution.",
       technologies: ["Python", "GCP"],
+      categories: ["genai-nlp"],
       client: "Optional public client name",
       metrics: [
         {
@@ -92,6 +96,7 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 ```
 
 - Remove `metrics` when no public, defensible result is available.
+- `categories` is required. Use values exported by `src/data/projectCategories.ts`; multiple values allow one project to appear in more than one filter.
 - Keep each metric tied to the project and label whether it represents product reach, engineering scale, a target scope, or a measured result.
 - Use `client` only when the organization name is approved for public use.
 - Add `href` only when a detailed case-study page exists.
@@ -107,6 +112,7 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 | Fatwa Semantic Search | `src/content/projects/fatwa-semantic-search.mdx` |
 | Fatwa Content Processing Pipeline | `src/content/projects/fatwa-content-processing-pipeline.mdx` |
 | Oil Rig Safety Computer Vision | `src/content/projects/oil-rig-safety.mdx` |
+| Football Match Analytics Computer Vision | `src/content/projects/football-match-analytics.mdx` |
 | IslamWeb RAG Chatbot | `src/content/projects/islamweb-rag-chatbot.mdx` |
 | Khateeb Assistant | `src/content/projects/khateeb-assistant.mdx` |
 | GenAI Assistant Agent | `src/content/projects/genai-assistant-agent.mdx` |
@@ -118,6 +124,7 @@ The iHorizons projects are intentionally split by engineering scope:
 - `Fatwa Semantic Search`: retrieval quality, Gemini embeddings, BigQuery Vector Search, BM25, hybrid retrieval, RRF, and relevance evaluation.
 - `Fatwa Content Processing Pipeline`: synchronization, enrichment, classification, Arabic TTS, Quran-aware processing, BM25 artifact generation, and scheduled automation.
 - `Oil Rig Safety Computer Vision`: recorded-video object detection, dataset preparation, model comparison, worker tracking, restricted-zone monitoring, and annotated output.
+- `Football Match Analytics Computer Vision`: four-class detection, entity tracking, team clustering, homography, approximate match KPIs, tactical radar views, and annotated output.
 - `IslamWeb RAG Chatbot`: Arabic RAG, conversation routing, and scholar escalation.
 - `Khateeb Assistant`: grounded Arabic sermon preparation, trusted-reference retrieval, moderation/revision loops, word-count adjustment, ADK/Agent Engine production deployment, and human review.
 
@@ -167,7 +174,16 @@ To update it later, replace this file while keeping the same filename:
 
 The component keeps the image wide and readable on desktop, and allows horizontal scrolling on smaller screens instead of shrinking the text too much.
 
-Code-native case-study flows, including the `computer-vision` diagram used by Oil Rig Safety, are defined in `src/components/ArchitectureDiagram.astro`. The computer-vision flow uses three rows on desktop and stacks vertically on mobile. Its type is registered in `src/content.config.ts`.
+Code-native case-study flows are defined in `src/components/ArchitectureDiagram.astro`. The `computer-vision` and `football-analytics` diagrams share a three-row desktop layout and stack vertically on mobile. Diagram types are registered in `src/content.config.ts`.
+
+## Project Filtering
+
+The category source of truth is `src/data/projectCategories.ts`. Category assignments live on each project in `src/data/experience.ts`.
+
+- Homepage focus links are rendered in `src/pages/index.astro`.
+- The `/work/` controls and filtering script are in `src/pages/work/index.astro`.
+- Stable filtered URLs use `/work/?focus=category-value`.
+- Every project is rendered in the static HTML. The script only hides non-matching cards when JavaScript is available.
 
 ## Colors And Typography
 

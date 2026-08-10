@@ -1,8 +1,11 @@
+import type { ProjectCategory } from "./projectCategories";
+
 export type ExperienceProject = {
   title: string;
   description: string;
   contribution: string;
   technologies: string[];
+  categories: ProjectCategory[];
   client?: string;
   metrics?: {
     value: string;
@@ -45,6 +48,7 @@ export const experience: Experience[] = [
         contribution:
           "Built Gemini embedding retrieval, BM25 keyword retrieval, RRF fusion, retrieval evaluation workflows, human labeling support, LLM-assisted relevance review, and production search deployment.",
         technologies: ["Python", "Gemini Embeddings", "BigQuery Vector Search", "BM25", "Hybrid Retrieval", "RRF", "Google Cloud"],
+        categories: ["genai-nlp"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         metrics: [
           // { value: "165K+", label: "searchable Arabic fatwas" },
@@ -62,6 +66,7 @@ export const experience: Experience[] = [
         contribution:
           "Built a daily Cloud Run pipeline that detects newly published fatwas, fetches and processes content, runs Gemini batch summarization, flags sensitive and modern topics, generates Arabic TTS with Quran-aware preprocessing, and refreshes BM25 search artifacts.",
         technologies: ["Python", "Gemini Batch Inference", "Google Cloud Scheduler", "Cloud Run", "Cloud Storage", "BigQuery", "Text-to-Speech", "BM25"],
+        categories: ["genai-nlp"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         metrics: [
           { value: "165K+", label: "Fatwa text processed" },
@@ -77,6 +82,7 @@ export const experience: Experience[] = [
         contribution:
           "Researched and prepared domain data, annotated and versioned datasets in Roboflow, fine-tuned YOLO and RF-DETR detectors, tracked evaluation with MLflow, and integrated the selected RF-DETR model with ByteTrack, zone-event logic, and OpenCV video rendering.",
         technologies: ["Python", "PyTorch", "RF-DETR", "YOLO", "OpenCV", "ByteTrack", "Roboflow", "MLflow", "Object Detection", "Multi-Object Tracking"],
+        categories: ["computer-vision"],
         metrics: [
           { value: "≈0.80", label: "best RF-DETR EMA mAP on project validation data" },
           { value: "3", label: "detected classes: worker, hardhat, and vest" },
@@ -85,12 +91,28 @@ export const experience: Experience[] = [
         href: "/work/oil-rig-safety/"
       },
       {
+        title: "Football Match Analytics Computer Vision",
+        description:
+          "Recorded-match computer vision pipeline that detects and tracks match entities, maps play to pitch coordinates, and renders numerical and spatial analytics.",
+        contribution:
+          "Fine-tuned YOLO 26 Large for four-class detection and built the two-pass pipeline covering ByteTrack continuity, bounded ball interpolation, appearance-based team assignment, homography, possession and movement estimates, tactical radar views, and annotated video output.",
+        technologies: ["Python", "PyTorch", "YOLO 26", "OpenCV", "ByteTrack", "Supervision", "SigLIP", "UMAP", "K-Means", "Scikit-learn", "Homography", "Roboflow", "Pillow"],
+        categories: ["computer-vision", "clustering"],
+        metrics: [
+          { value: "4", label: "detected entity classes" },
+          { value: "3", label: "core KPIs: possession, speed, and distance" },
+          { value: "2", label: "tactical radar modes: Voronoi and heatmap" }
+        ],
+        href: "/work/football-match-analytics/"
+      },
+      {
         title: "Khateeb Multi-Agent Assistant",
         description:
           "A grounded Arabic sermon-generation assistant for Khateebs, using retrieval, specialist agents, moderation, and review loops to support Friday sermon preparation while preserving human accountability.",
         contribution:
           "Built the n8n POC and helped move the production workflow to Google ADK and Agent Engine, separating requirement extraction, retrieval, drafting, moderation, revision, word-count adjustment, and human review.",
         technologies: ["Google ADK", "Agent Engine", "Vertex AI", "Google RAG Engine", "Gemini", "n8n", "Arabic NLP", "Multi-Agent Workflows"],
+        categories: ["genai-nlp"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         metrics: [
           { value: "1,000+", label: "mosques in the intended Qatar support scope" },
@@ -105,6 +127,7 @@ export const experience: Experience[] = [
         contribution:
           "Developed retrieval and response workflows, plus an intent agent that escalates appropriate conversations to a scholar.",
         technologies: ["Python", "Gemini Embeddings", "BigQuery Vector Search", "Telegram"],
+        categories: ["genai-nlp"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         // metrics: [
         //   { value: "165K+", label: "fatwas processed and indexed" }
@@ -133,6 +156,7 @@ export const experience: Experience[] = [
         contribution:
           "Developed the LangGraph workflow, memory retrieval, tool integration, and Docker deployment.",
         technologies: ["Python", "Langchain", "LangGraph Studio", "LangChain", "Docker"],
+        categories: ["genai-nlp"],
         // href: "/work/genai-assistant-agent/"
       },
       {
@@ -142,6 +166,7 @@ export const experience: Experience[] = [
         contribution:
           "Built product and customer segmentation models, evaluated performance, and deployed customer-specific solutions.",
         technologies: ["Python", "Scikit-learn", "Pandas", "Tableau", "Clustering"],
+        categories: ["clustering"],
         metrics: [{ value: "3", label: "Customer deployments" }]
       },
       {
@@ -151,6 +176,7 @@ export const experience: Experience[] = [
         contribution:
           "Built recommendation models for upselling and cross-selling, optimized inference with Cython and NumPy to reduce response time by 80% and created CI/CD workflows.",
         technologies: ["Python", "Cython", "NumPy", "CI/CD"],
+        categories: ["recommendation-systems"],
         metrics: [{ value: "80%", label: "reduction in response time" }]
       }
     ]
@@ -175,6 +201,7 @@ export const experience: Experience[] = [
         contribution:
           "Designed and deployed a scalable forecasting engine that predicts product demand and evaluates promotional impact across millions of retail transactions.",
         technologies: ["Python", "PySpark", "SQL", "Time Series"],
+        categories: ["regression-forecasting"],
         metrics: [
           { value: "10M+", label: "transactions processed" },
           { value: "3", label: "Customer deployments" }
@@ -187,6 +214,7 @@ export const experience: Experience[] = [
         contribution:
           "Built the modeling and explainability modules and automated daily operational reporting.",
         technologies: ["Python", "Regression", "ML Explainability", "Dashboards"],
+        categories: ["regression-forecasting"],
         metrics: [{ value: "15%", label: "profit-margin improvement" }]
       }
     ]

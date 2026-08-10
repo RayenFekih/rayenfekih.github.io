@@ -1,0 +1,105 @@
+---
+title: "Football Match Analytics Computer Vision"
+summary: "A recorded-match computer vision pipeline that detects and tracks players, goalkeepers, referees, and the ball; maps movement to pitch coordinates; estimates match KPIs; and produces an annotated broadcast-style video."
+role: "AI Engineer"
+employer: "iHorizons"
+period: "2026"
+featuredRank: 5
+problem: "Build an end-to-end football video analysis POC that turns recorded match footage into explainable entity tracks, pitch-space positions, approximate movement and possession metrics, tactical spatial views, and a readable annotated output without overstating the precision of heuristic analytics."
+scale: "Recorded match footage mapped bidirectionally to a 120 x 70 metre pitch model"
+metrics:
+  - value: "4"
+    label: "detected entity classes"
+  - value: "3"
+    label: "core KPIs: possession, speed, and distance"
+  - value: "2"
+    label: "tactical radar modes: Voronoi and heatmap"
+capabilities:
+  - "Object detection"
+  - "Multi-object tracking"
+  - "Team clustering"
+  - "Pitch calibration"
+  - "Spatial analytics"
+technologies:
+  - "Python"
+  - "PyTorch"
+  - "YOLO 26"
+  - "OpenCV"
+  - "ByteTrack"
+  - "Supervision"
+  - "SigLIP"
+  - "UMAP"
+  - "K-Means"
+  - "Scikit-learn"
+  - "Homography"
+  - "Roboflow"
+  - "Pillow"
+confidentiality: "This public case study omits source footage, trained weights, cached detections, credentials, private identifiers, repository details, and implementation-specific artifacts. The architecture is presented at a sanitized project level."
+diagramType: "football-analytics"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+The objective was to build a proof of concept that extracts useful football analytics from recorded match video. The pipeline detects players, goalkeepers, referees, and the ball; maintains short-term entity continuity; assigns teams from visual appearance; maps image positions to a standard pitch model; derives approximate possession and movement metrics; and renders the results into an annotated MP4.
+
+This is an offline recorded-video workflow, not a live broadcast or production analytics service. Its outputs are engineering estimates from monocular video and should not be interpreted as official match statistics.
+
+## Data preparation and model training
+
+Training data was prepared and versioned through Roboflow using four labels: player, goalkeeper, referee, and ball. A YOLO 26 Large detector was fine-tuned for this project-specific class set. The public case study intentionally does not publish model accuracy, inference speed, private dataset references, or checkpoint details because no approved evaluation artifact supports those claims.
+
+<h2 id="implementation">Detection, tracking, and pitch mapping</h2>
+
+### Batched entity detection
+
+Recorded frames are processed in batches by the fine-tuned detector. Ball and non-ball predictions use separate non-maximum suppression passes before they are merged. This prevents a much larger player box from incorrectly suppressing a nearby ball detection.
+
+Merged detections pass through ByteTrack so the tracker sees the complete scene state. Players, goalkeepers, and referees use tracker output for visible continuity. The rendered ball box instead uses the strongest pre-track detection because a small, fast-moving ball does not maintain a reliable persistent identity in the same way as larger entities.
+
+Short, bounded gaps between valid ball detections are filled with linear box and confidence interpolation. Leading, trailing, and longer gaps remain empty. This is a visual continuity rule, not a learned trajectory model or physics simulation.
+
+### Appearance-based team assignment
+
+Representative player crops are encoded with SigLIP. UMAP reduces the embeddings to a compact feature space, then K-Means separates them into two appearance clusters. Visible goalkeepers are assigned to the nearest player-team centroid.
+
+This approach is useful when team kits are visually distinct, but it can become unreliable with similar colors, lighting changes, occlusion, or poor crops. It does not identify named players and does not use person re-identification.
+
+### Pitch keypoints and homography
+
+Pitch keypoints can be supplied by a hosted Roboflow model or a local YOLO pose model. Low-confidence keypoints are discarded, and a homography is estimated only when at least four valid image-to-pitch correspondences are available.
+
+OpenCV homography maps positions in both directions between the video frame and a 120 x 70 metre pitch model. Bottom-center player positions are projected into pitch space for movement calculations, while pitch-space graphics and vectors are projected back into the video for overlays. Frames without a trustworthy transform cannot support calibrated pitch analytics.
+
+<h2 id="evaluation">Derived analytics and safeguards</h2>
+
+Possession is estimated by assigning the most confident visible ball to the nearest player or goalkeeper within a configured distance. Frames with no suitable ball detection are excluded. The result is a heuristic possession proxy, not event-level or official possession data.
+
+Approximate speed and distance use bottom-center positions after homography, temporal smoothing, jitter suppression, and rejection of implausibly large jumps. Missing track intervals are not bridged. Movement vectors are projected back into frame space and displayed as direction chevrons.
+
+The tactical radar supports two views:
+
+- A Voronoi partition that approximates visible team spatial control.
+- An accumulated heatmap built from all visible player positions over time.
+
+These are descriptive visualizations of the observed footage. The pipeline does not infer formations, passes, shots, expected goals, offsides, or tactical recommendations.
+
+<h2 id="deployment">Two-pass processing and output</h2>
+
+The workflow uses two passes to avoid repeating the most expensive operations. The first pass runs detection, tracking, and pitch-keypoint inference, caches the raw outputs, and applies bounded ball interpolation. The second pass rereads the video to perform team assignment, homography, numerical calculations, tactical rendering, and final composition.
+
+OpenCV draws entity boxes, IDs, movement chevrons, pitch overlays, and tactical radar views. A Pillow-based RGBA panel adds possession and top-mover information at a lower refresh cadence before being alpha-composited onto the video. The final artifact is an annotated MP4 intended for technical review and demonstration.
+
+<h2 id="results">Results, lessons, and limitations</h2>
+
+The project produced a complete recorded-match analysis workflow connecting detector fine-tuning, temporal tracking, appearance clustering, camera-to-pitch calibration, derived metrics, tactical visualization, and broadcast-style rendering.
+
+The main engineering lessons were:
+
+- Small-object behavior required separate ball post-processing rather than assuming one tracking strategy worked for every class.
+- Tracking continuity and ball interpolation needed explicit limits to avoid presenting guessed positions as observations.
+- Homography made speed and distance more meaningful than pixel-space measurements, but only while pitch calibration remained valid.
+- Team clustering was practical for visually distinct kits, although it remained sensitive to appearance changes and goalkeeper handling.
+- Cached two-pass processing made iterative visualization work more practical without claiming real-time performance.
+
+Current limitations include recorded-video-only processing, no ReID, no guaranteed identity persistence, heuristic possession, approximate speed and distance, occasional homography failure, kit-color ambiguity, and no persistent analytics service. The project is a technical POC and does not claim customer adoption or production deployment.

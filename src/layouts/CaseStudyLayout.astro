@@ -5,7 +5,7 @@ import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
 
 const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { data } = project;
-const isComputerVision = data.diagramType === "computer-vision";
+const usesOutputLabel = ["computer-vision", "football-analytics"].includes(data.diagramType);
 ---
 <BaseLayout title={data.title} description={data.summary} type="article">
   <script
@@ -58,7 +58,7 @@ const isComputerVision = data.diagramType === "computer-vision";
           <a href="#architecture">Architecture</a>
           <a href="#implementation">Implementation</a>
           <a href="#evaluation">Evaluation</a>
-          <a href="#deployment">{isComputerVision ? "Output" : "Deployment"}</a>
+          <a href="#deployment">{usesOutputLabel ? "Output" : "Deployment"}</a>
           <a href="#results">Results</a>
         </nav>
         <p class="confidentiality">{data.confidentiality}</p>

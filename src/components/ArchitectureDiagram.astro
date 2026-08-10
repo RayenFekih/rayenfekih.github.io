@@ -46,6 +46,7 @@ const diagrams = {
     accent: 6
   },
   "computer-vision": {
+    layout: "multi-row",
     nodes: [
       "Video and image collection",
       "Frame sampling and filtering",
@@ -60,6 +61,23 @@ const diagrams = {
     accents: [4, 7],
     caption:
       "Representative end-to-end computer vision workflow. Source footage, dataset artifacts, trained weights, and implementation details are omitted."
+  },
+  "football-analytics": {
+    layout: "multi-row",
+    nodes: [
+      "Match video",
+      "YOLO 26 entity detection",
+      "ByteTrack and bounded ball recovery",
+      "SigLIP, UMAP, and K-Means team assignment",
+      "Pitch-keypoint detection",
+      "Homography and pitch coordinates",
+      "Possession, speed, and distance KPIs",
+      "Voronoi and heatmap radar",
+      "Broadcast-style annotated video"
+    ],
+    accents: [5, 6],
+    caption:
+      "Representative football analytics workflow. Source footage, trained weights, cached artifacts, credentials, and implementation details are omitted."
   }
 };
 
@@ -77,45 +95,45 @@ const accentIndexes = "accents" in diagram
     <span class="sanitized-label">Sanitized</span>
   </div>
 
-  {type === "computer-vision" && "nodes" in diagram ? (
-    <div class="cv-architecture-flow">
-      <div class="cv-flow-row">
+  {"layout" in diagram && diagram.layout === "multi-row" && "nodes" in diagram ? (
+    <div class="multi-row-architecture-flow">
+      <div class="multi-row-flow-row">
         {diagram.nodes.slice(0, 3).map((node, index) => (
           <>
-            <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+            <div class:list={["architecture-node", { "multi-row-node-accent": accentIndexes.includes(index) }]}>
               <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
               <span>{node}</span>
             </div>
-            {index < 2 && <span class="cv-flow-arrow" aria-hidden="true">-&gt;</span>}
+            {index < 2 && <span class="multi-row-flow-arrow" aria-hidden="true">-&gt;</span>}
           </>
         ))}
       </div>
-      <span class="cv-flow-turn cv-flow-turn-right" aria-hidden="true">v</span>
-      <div class="cv-flow-row cv-flow-row-reverse">
+      <span class="multi-row-flow-turn multi-row-flow-turn-right" aria-hidden="true">v</span>
+      <div class="multi-row-flow-row multi-row-flow-row-reverse">
         {diagram.nodes.slice(3, 6).map((node, rowIndex) => {
           const index = rowIndex + 3;
           return (
             <>
-              <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+              <div class:list={["architecture-node", { "multi-row-node-accent": accentIndexes.includes(index) }]}>
                 <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
                 <span>{node}</span>
               </div>
-              {rowIndex < 2 && <span class="cv-flow-arrow cv-flow-arrow-reverse" aria-hidden="true">&lt;-</span>}
+              {rowIndex < 2 && <span class="multi-row-flow-arrow multi-row-flow-arrow-reverse" aria-hidden="true">&lt;-</span>}
             </>
           );
         })}
       </div>
-      <span class="cv-flow-turn cv-flow-turn-left" aria-hidden="true">v</span>
-      <div class="cv-flow-row">
+      <span class="multi-row-flow-turn multi-row-flow-turn-left" aria-hidden="true">v</span>
+      <div class="multi-row-flow-row">
         {diagram.nodes.slice(6, 9).map((node, rowIndex) => {
           const index = rowIndex + 6;
           return (
             <>
-              <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+              <div class:list={["architecture-node", { "multi-row-node-accent": accentIndexes.includes(index) }]}>
                 <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
                 <span>{node}</span>
               </div>
-              {rowIndex < 2 && <span class="cv-flow-arrow" aria-hidden="true">-&gt;</span>}
+              {rowIndex < 2 && <span class="multi-row-flow-arrow" aria-hidden="true">-&gt;</span>}
             </>
           );
         })}
@@ -161,45 +179,45 @@ const accentIndexes = "accents" in diagram
     margin: 0 auto;
   }
 
-  .cv-architecture-flow {
+  .multi-row-architecture-flow {
     display: grid;
     gap: 10px;
   }
 
-  .cv-flow-row {
+  .multi-row-flow-row {
     display: flex;
     align-items: stretch;
     gap: 9px;
   }
 
-  .cv-flow-row-reverse {
+  .multi-row-flow-row-reverse {
     flex-direction: row-reverse;
   }
 
-  .cv-flow-row .architecture-node {
+  .multi-row-flow-row .architecture-node {
     flex: 1;
     max-width: none;
     min-height: 76px;
   }
 
-  .cv-node-accent {
+  .multi-row-node-accent {
     border-color: var(--accent);
     box-shadow: 0 0 22px var(--accent-soft);
   }
 
-  .cv-flow-arrow,
-  .cv-flow-turn {
+  .multi-row-flow-arrow,
+  .multi-row-flow-turn {
     align-self: center;
     color: var(--accent);
     font-family: var(--mono);
   }
 
-  .cv-flow-turn {
+  .multi-row-flow-turn {
     justify-self: end;
     margin-right: 15%;
   }
 
-  .cv-flow-turn-left {
+  .multi-row-flow-turn-left {
     justify-self: start;
     margin-right: 0;
     margin-left: 15%;
@@ -221,30 +239,30 @@ const accentIndexes = "accents" in diagram
       padding: 8px;
     }
 
-    .cv-architecture-flow {
+    .multi-row-architecture-flow {
       gap: 8px;
     }
 
-    .cv-flow-row,
-    .cv-flow-row-reverse {
+    .multi-row-flow-row,
+    .multi-row-flow-row-reverse {
       flex-direction: column;
     }
 
-    .cv-flow-row .architecture-node {
+    .multi-row-flow-row .architecture-node {
       width: 100%;
       min-height: 0;
     }
 
-    .cv-flow-arrow {
+    .multi-row-flow-arrow {
       transform: rotate(90deg);
     }
 
-    .cv-flow-arrow-reverse {
-      transform: rotate(-90deg);
+    .multi-row-flow-arrow-reverse {
+      transform: rotate(90deg);
     }
 
-    .cv-flow-turn,
-    .cv-flow-turn-left {
+    .multi-row-flow-turn,
+    .multi-row-flow-turn-left {
       justify-self: center;
       margin: 0;
     }
