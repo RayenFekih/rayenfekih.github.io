@@ -44,10 +44,31 @@ const diagrams = {
       "Publish processed outputs"
     ],
     accent: 6
+  },
+  "computer-vision": {
+    nodes: [
+      "Video and image collection",
+      "Frame sampling and filtering",
+      "Roboflow annotation and dataset versioning",
+      "YOLO and RF-DETR fine-tuning",
+      "MLflow evaluation and model selection",
+      "RF-DETR video inference",
+      "ByteTrack and DIoU worker tracking",
+      "Zone evaluation and debounced alerts",
+      "Annotated MP4 output"
+    ],
+    accents: [4, 7],
+    caption:
+      "Representative end-to-end computer vision workflow. Source footage, dataset artifacts, trained weights, and implementation details are omitted."
   }
 };
 
 const diagram = diagrams[type as keyof typeof diagrams];
+const accentIndexes = "accents" in diagram
+  ? diagram.accents
+  : "accent" in diagram
+    ? [diagram.accent]
+    : [];
 ---
 
 <figure class="architecture" aria-label={label}>
@@ -56,7 +77,51 @@ const diagram = diagrams[type as keyof typeof diagrams];
     <span class="sanitized-label">Sanitized</span>
   </div>
 
-  {"image" in diagram ? (
+  {type === "computer-vision" && "nodes" in diagram ? (
+    <div class="cv-architecture-flow">
+      <div class="cv-flow-row">
+        {diagram.nodes.slice(0, 3).map((node, index) => (
+          <>
+            <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+              <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
+              <span>{node}</span>
+            </div>
+            {index < 2 && <span class="cv-flow-arrow" aria-hidden="true">-&gt;</span>}
+          </>
+        ))}
+      </div>
+      <span class="cv-flow-turn cv-flow-turn-right" aria-hidden="true">v</span>
+      <div class="cv-flow-row cv-flow-row-reverse">
+        {diagram.nodes.slice(3, 6).map((node, rowIndex) => {
+          const index = rowIndex + 3;
+          return (
+            <>
+              <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+                <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
+                <span>{node}</span>
+              </div>
+              {rowIndex < 2 && <span class="cv-flow-arrow cv-flow-arrow-reverse" aria-hidden="true">&lt;-</span>}
+            </>
+          );
+        })}
+      </div>
+      <span class="cv-flow-turn cv-flow-turn-left" aria-hidden="true">v</span>
+      <div class="cv-flow-row">
+        {diagram.nodes.slice(6, 9).map((node, rowIndex) => {
+          const index = rowIndex + 6;
+          return (
+            <>
+              <div class:list={["architecture-node", { "cv-node-accent": accentIndexes.includes(index) }]}>
+                <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
+                <span>{node}</span>
+              </div>
+              {rowIndex < 2 && <span class="cv-flow-arrow" aria-hidden="true">-&gt;</span>}
+            </>
+          );
+        })}
+      </div>
+    </div>
+  ) : "image" in diagram ? (
     <div class="image-diagram-shell">
       <img src={diagram.image} alt={diagram.alt} loading="lazy" decoding="async" />
     </div>
@@ -65,7 +130,7 @@ const diagram = diagrams[type as keyof typeof diagrams];
       <div class="architecture-flow">
         {diagram.nodes.map((node, index) => (
           <>
-            <div class:list={["architecture-node", { "node-accent": index === diagram.accent }]}>
+            <div class:list={["architecture-node", { "node-accent": accentIndexes.includes(index) }]}>
               <span class="node-index">{String(index + 1).padStart(2, "0")}</span>
               <span>{node}</span>
             </div>
@@ -96,6 +161,50 @@ const diagram = diagrams[type as keyof typeof diagrams];
     margin: 0 auto;
   }
 
+  .cv-architecture-flow {
+    display: grid;
+    gap: 10px;
+  }
+
+  .cv-flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 9px;
+  }
+
+  .cv-flow-row-reverse {
+    flex-direction: row-reverse;
+  }
+
+  .cv-flow-row .architecture-node {
+    flex: 1;
+    max-width: none;
+    min-height: 76px;
+  }
+
+  .cv-node-accent {
+    border-color: var(--accent);
+    box-shadow: 0 0 22px var(--accent-soft);
+  }
+
+  .cv-flow-arrow,
+  .cv-flow-turn {
+    align-self: center;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  .cv-flow-turn {
+    justify-self: end;
+    margin-right: 15%;
+  }
+
+  .cv-flow-turn-left {
+    justify-self: start;
+    margin-right: 0;
+    margin-left: 15%;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;
@@ -110,6 +219,34 @@ const diagram = diagrams[type as keyof typeof diagrams];
   @media (max-width: 680px) {
     .image-diagram-shell {
       padding: 8px;
+    }
+
+    .cv-architecture-flow {
+      gap: 8px;
+    }
+
+    .cv-flow-row,
+    .cv-flow-row-reverse {
+      flex-direction: column;
+    }
+
+    .cv-flow-row .architecture-node {
+      width: 100%;
+      min-height: 0;
+    }
+
+    .cv-flow-arrow {
+      transform: rotate(90deg);
+    }
+
+    .cv-flow-arrow-reverse {
+      transform: rotate(-90deg);
+    }
+
+    .cv-flow-turn,
+    .cv-flow-turn-left {
+      justify-self: center;
+      margin: 0;
     }
   }
 </style>

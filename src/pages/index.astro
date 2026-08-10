@@ -7,7 +7,7 @@ import { siteConfig } from "../config/site";
 const skills = [
   {
     title: "AI and Machine Learning",
-    items: ["GenAI", "RAG", "Semantic Search", "Agent Workflows", "Recommendation Systems", "Forecasting", "Pricing Models", "Scikit-learn"]
+    items: ["GenAI", "RAG", "Semantic Search", "Agent Workflows", "Computer Vision", "Object Detection", "Multi-Object Tracking", "Recommendation Systems", "Forecasting", "Pricing Models", "Scikit-learn"]
   },
   {
     title: "Programming and Data",
@@ -19,13 +19,13 @@ const skills = [
   },
   {
     title: "Frameworks and Tools",
-    items: ["LangChain", "LangGraph", "n8n", "Google RAG Engine", "Tableau", "GitLab"]
+    items: ["PyTorch", "OpenCV", "MLflow", "LangChain", "LangGraph", "n8n", "Google RAG Engine", "Tableau", "GitLab"]
   }
 ];
 ---
 <BaseLayout
   title="Home"
-  description="Mohamed Rayen Fekih is an AI and Machine Learning Engineer with experience in GenAI, RAG, semantic search, recommendation systems, forecasting, pricing, and cloud deployment."
+  description="Mohamed Rayen Fekih is an AI and Machine Learning Engineer with experience in GenAI, RAG, semantic search, computer vision, recommendation systems, forecasting, pricing, and cloud deployment."
 >
   <script
     slot="head"
@@ -45,7 +45,7 @@ const skills = [
           "https://www.linkedin.com/in/rayen-fekih/",
           "https://github.com/RayenFekih"
         ],
-        knowsAbout: ["Generative AI", "RAG", "Semantic search", "Machine learning", "Google Cloud"]
+        knowsAbout: ["Generative AI", "RAG", "Semantic search", "Computer vision", "Object detection", "Multi-object tracking", "Machine learning", "Google Cloud"]
       }
     })}
   />
@@ -54,7 +54,7 @@ const skills = [
     <h1>Mohamed Rayen Fekih</h1>
     <p class="cv-role">Senior AI / Machine Learning Engineer</p>
     <p class="cv-summary">
-      AI Engineer with 5+ years of experience building production machine learning and GenAI systems. My work spans semantic search, RAG applications, agentic workflows, recommendation engines, forecasting, and large-scale content processing systems.
+      AI Engineer with 5+ years of experience building production machine learning and GenAI systems. My work spans semantic search, RAG applications, agentic workflows, computer vision, recommendation engines, forecasting, and large-scale content processing systems.
     </p>
     <div class="button-row cv-actions">
       <a class="button" href={siteConfig.cvPath} download>Download CV <Icon name="download" /></a>
@@ -155,7 +155,7 @@ const skills = [
       <div class="cv-section-heading">
         <p class="eyebrow">Portfolio</p>
         <h2>Selected Projects</h2>
-        <p>Detailed case studies for selected GenAI and machine learning projects.</p>
+        <p>Detailed case studies for selected GenAI, computer vision, and machine learning projects.</p>
       </div>
       <div class="selected-project-links">
         {experience.flatMap((job) =>

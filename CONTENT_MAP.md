@@ -106,6 +106,7 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 | --- | --- |
 | Fatwa Semantic Search | `src/content/projects/fatwa-semantic-search.mdx` |
 | Fatwa Content Processing Pipeline | `src/content/projects/fatwa-content-processing-pipeline.mdx` |
+| Oil Rig Safety Computer Vision | `src/content/projects/oil-rig-safety.mdx` |
 | IslamWeb RAG Chatbot | `src/content/projects/islamweb-rag-chatbot.mdx` |
 | Khateeb Assistant | `src/content/projects/khateeb-assistant.mdx` |
 | GenAI Assistant Agent | `src/content/projects/genai-assistant-agent.mdx` |
@@ -116,6 +117,7 @@ The iHorizons projects are intentionally split by engineering scope:
 
 - `Fatwa Semantic Search`: retrieval quality, Gemini embeddings, BigQuery Vector Search, BM25, hybrid retrieval, RRF, and relevance evaluation.
 - `Fatwa Content Processing Pipeline`: synchronization, enrichment, classification, Arabic TTS, Quran-aware processing, BM25 artifact generation, and scheduled automation.
+- `Oil Rig Safety Computer Vision`: recorded-video object detection, dataset preparation, model comparison, worker tracking, restricted-zone monitoring, and annotated output.
 - `IslamWeb RAG Chatbot`: Arabic RAG, conversation routing, and scholar escalation.
 - `Khateeb Assistant`: grounded Arabic sermon preparation, trusted-reference retrieval, moderation/revision loops, word-count adjustment, ADK/Agent Engine production deployment, and human review.
 
@@ -164,6 +166,8 @@ To update it later, replace this file while keeping the same filename:
 `public/assets/diagrams/khateeb-workflow.png`
 
 The component keeps the image wide and readable on desktop, and allows horizontal scrolling on smaller screens instead of shrinking the text too much.
+
+Code-native case-study flows, including the `computer-vision` diagram used by Oil Rig Safety, are defined in `src/components/ArchitectureDiagram.astro`. The computer-vision flow uses three rows on desktop and stacks vertically on mobile. Its type is registered in `src/content.config.ts`.
 
 ## Colors And Typography
 

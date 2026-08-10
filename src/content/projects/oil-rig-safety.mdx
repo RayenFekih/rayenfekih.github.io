@@ -1,0 +1,123 @@
+---
+title: "Oil Rig Safety Computer Vision"
+summary: "An end-to-end computer vision safety POC that detects workers and PPE in recorded oil-rig CCTV footage, tracks workers across frames, monitors a predefined restricted zone, and produces an annotated demonstration video."
+role: "AI Engineer"
+employer: "iHorizons"
+period: "2026"
+featuredRank: 3
+problem: "Develop a recorded-video safety POC that can detect workers, hardhats, and safety vests in challenging industrial footage, maintain worker tracks across frames, and generate stable restricted-zone entry and exit alerts without overstating the system's PPE-compliance capabilities."
+scale: "End-to-end recorded CCTV safety POC with one manually defined zone per camera or video"
+metrics:
+  - value: "≈0.80"
+    label: "best RF-DETR EMA mAP on project validation data"
+  - value: "3"
+    label: "detected classes: worker, hardhat, and vest"
+  - value: "2"
+    label: "detector families fine-tuned and benchmarked"
+capabilities:
+  - "Object detection"
+  - "Multi-object tracking"
+  - "PPE detection"
+  - "Restricted-zone monitoring"
+  - "Safety-event logic"
+technologies:
+  - "Python"
+  - "PyTorch"
+  - "RF-DETR"
+  - "YOLO"
+  - "OpenCV"
+  - "ByteTrack"
+  - "Roboflow"
+  - "MLflow"
+confidentiality: "This public case study omits source footage, trained weights, credentials, private dataset links, internal paths, and detailed dataset artifacts. The architecture and results are presented at a sanitized project level."
+diagramType: "computer-vision"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+The goal was to build an industrial computer vision proof of concept from recorded oil-rig CCTV footage. The system needed to detect workers, hardhats, and safety vests; maintain worker identities across frames; let an operator define a restricted polygonal zone; raise stable entry and exit alerts; and produce an annotated demonstration video.
+
+Publicly available oil-rig CCTV datasets are limited. Construction-safety datasets offered a useful starting point, but their camera angles, worker scale, lighting, backgrounds, and PPE appearance did not fully represent offshore footage. Data relevance and domain adaptation therefore became central engineering concerns rather than preliminary data-cleaning tasks.
+
+The result is a recorded-video POC, not a production deployment or live CCTV system. It processes one camera or video at a time and supports one manually defined restricted zone for that view.
+
+## Data collection and annotation
+
+I began with public construction-safety data because it was the closest available domain for worker and PPE detection. Early experiments exposed a clear gap between generic construction images and fixed-camera offshore footage, especially for distant workers, small PPE objects, challenging illumination, and visually complex industrial backgrounds.
+
+To improve domain coverage, I collected more representative frames from public oil-rig and industrial videos. A frame-sampling workflow used temporal spacing and perceptual hashing to reduce near-duplicate images, with optional blur filtering to exclude unusable frames. This produced a more varied and useful annotation set than uniform frame extraction.
+
+I manually annotated worker, hardhat, and vest bounding boxes in Roboflow. Roboflow was also used to organize train, validation, and test data, manage dataset versions, and apply preprocessing and augmentation. Exposure and brightness changes, cropping, and horizontal flipping increased visual diversity while keeping the three-class labeling scheme consistent.
+
+<h2 id="implementation">Model experimentation and fine-tuning</h2>
+
+Both YOLO and RF-DETR detectors were fine-tuned and evaluated. Initial experiments used construction-safety data, followed by more representative project data as the domain gap became clearer. Detector selection was based on comparison rather than choosing a model family in advance.
+
+Experiments varied image resolution, batch size, gradient accumulation, learning rate, augmentation, early stopping, and inference confidence thresholds. MLflow recorded training configurations and evaluation results so model runs could be compared consistently.
+
+Evaluation combined mAP, precision, recall, and qualitative inspection of predictions on recorded video. Quantitative validation metrics were necessary, but video review exposed practical issues such as missed small objects, unstable detections, and bounding-box changes that directly affected tracking.
+
+RF-DETR generalized better for the available project data and was selected for the video pipeline. The selected tuned checkpoint achieved approximately 0.70 EMA mAP on the project validation data. This is a project-specific validation result, not an external benchmark or production performance claim.
+
+## Video inference pipeline
+
+The implemented flow is:
+
+`Recorded video -> RF-DETR inference -> worker and PPE detection split -> ByteTrack worker tracking -> restricted-zone evaluation -> debounced entry/exit events -> OpenCV annotated MP4`
+
+A single RF-DETR model detects workers, hardhats, and vests. Only worker detections are passed to ByteTrack. Hardhat and vest detections are rendered independently on each frame and are not associated with a specific tracked worker.
+
+The current system therefore cannot reliably answer whether a particular tracked worker is wearing a hardhat or vest. It demonstrates PPE object detection and worker zone monitoring, not automated per-worker PPE compliance.
+
+### Tracking engineering
+
+ByteTrack assigns persistent IDs to worker detections across frames. Detection instability, occlusion, and changing worker boxes can still fragment tracks or cause ID switches, so tracker behavior required tuning rather than accepting default settings.
+
+The tuned parameters included track-activation and detection thresholds, lost-track buffering, minimum consecutive frames, and the minimum matching threshold. DIoU-based matching incorporates bounding-box overlap and center-distance information, improving matching behavior over plain IoU for changing worker boxes in this project.
+
+The pipeline does not use person re-identification and does not claim perfect identity persistence.
+
+### Restricted-zone monitoring
+
+An operator draws a polygon on a reference frame through an OpenCV interface. The polygon is saved in YAML and reused for that camera or clip.
+
+For every tracked worker, the system calculates the bottom-center foot point of the bounding box and tests it against the polygon with `cv2.pointPolygonTest`. Entry and exit transitions must remain consistent across consecutive frames before an event is confirmed. This debounce logic reduces alerts caused by one-frame detection noise near the zone boundary.
+
+The current implementation supports one manually defined zone per camera or video. It does not include multiple zone types, dwell-time rules, or multi-camera coordination.
+
+<h2 id="evaluation">Evaluation approach</h2>
+
+Detector evaluation combined project-validation metrics with qualitative video inspection. This was important because a model with acceptable aggregate metrics could still produce unstable boxes or miss small workers in ways that reduced tracking and alert quality.
+
+Tracking was evaluated through worker-ID continuity and visual inspection of fragmentation and switches. Restricted-zone behavior was checked around polygon boundaries to tune consecutive-frame confirmation and reduce noisy transitions.
+
+The evaluation process showed that detector quality, tracking stability, and event logic must be assessed together. Reliable safety events require temporal reasoning after detection, not only accurate bounding boxes on isolated images.
+
+<h2 id="deployment">Visualization and output</h2>
+
+The pipeline writes an annotated MP4 containing:
+
+- Worker boxes and track IDs.
+- Separate hardhat and vest detections.
+- The restricted-zone overlay.
+- Entry and exit alert banners.
+- A HUD with elapsed time, tracked-worker count, and alert count.
+- A visual legend with class-specific colors.
+
+Alerts are currently displayed in the video and printed to standard output. They are not written to a persistent event database, and the pipeline does not save evidence frames or expose a monitoring dashboard.
+
+<h2 id="results">Results and lessons</h2>
+
+The project produced an end-to-end recorded-video POC linking dataset preparation, model comparison, worker tracking, restricted-zone logic, and annotated output.
+
+The main engineering conclusions were:
+
+- Data relevance mattered more than simply increasing model size or training duration.
+- Construction datasets provided a useful baseline but did not fully represent oil-rig CCTV conditions.
+- Detector evaluation required both quantitative metrics and qualitative video inspection.
+- RF-DETR performed better in this project's experiments and was selected on that basis; this is not a universal comparison with YOLO.
+- Stable safety events required temporal confirmation after detection.
+- Tracking quality and domain-specific annotation strongly affected the usefulness of the final pipeline.
+
+The clearest next improvements would be explicit PPE-to-worker association, persistent event records with evidence frames, stronger boundary hysteresis, multi-zone support, and automated tests for zone and debounce behavior. These are limitations and possible extensions, not capabilities of the current POC.

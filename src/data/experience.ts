@@ -30,11 +30,12 @@ export const experience: Experience[] = [
     location: "Qatar · Remote",
     period: "Jul 2025 - Present",
     summary:
-      "Developed Arabic retrieval, content-processing, RAG, and multi-agent AI systems for government-sector IslamWeb services.",
+      "Developed Arabic retrieval, content-processing, RAG, multi-agent, and computer vision systems for government and industry-focused use cases.",
     responsibilities: [
       "Deliver government-sector semantic search, RAG, and multi-agent applications.",
       "Build content enrichment, classification, and automation pipelines with Google Cloud and Vertex AI.",
-      "Implement evaluation and human-review workflows for sensitive public-service use cases."
+      "Implement evaluation and human-review workflows for sensitive public-service use cases.",
+      "Develop and evaluate computer vision models, tracking workflows, and safety-event logic for recorded industrial footage."
     ],
     projects: [
       {
@@ -68,6 +69,20 @@ export const experience: Experience[] = [
           { value: "Arabic", label: "TTS + Quran-aware preprocessing" }
         ],
         href: "/work/fatwa-content-processing-pipeline/"
+      },
+      {
+        title: "Oil Rig Safety Computer Vision",
+        description:
+          "Computer vision safety POC that detects workers and PPE in recorded oil-rig CCTV footage, tracks workers across frames, and raises alerts when they enter predefined danger zones.",
+        contribution:
+          "Researched and prepared domain data, annotated and versioned datasets in Roboflow, fine-tuned YOLO and RF-DETR detectors, tracked evaluation with MLflow, and integrated the selected RF-DETR model with ByteTrack, zone-event logic, and OpenCV video rendering.",
+        technologies: ["Python", "PyTorch", "RF-DETR", "YOLO", "OpenCV", "ByteTrack", "Roboflow", "MLflow", "Object Detection", "Multi-Object Tracking"],
+        metrics: [
+          { value: "≈0.80", label: "best RF-DETR EMA mAP on project validation data" },
+          { value: "3", label: "detected classes: worker, hardhat, and vest" },
+          { value: "2", label: "detector families fine-tuned and benchmarked" }
+        ],
+        href: "/work/oil-rig-safety/"
       },
       {
         title: "Khateeb Multi-Agent Assistant",
