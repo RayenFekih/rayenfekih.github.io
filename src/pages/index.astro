@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import OpenSourceCard from "../components/OpenSourceCard.astro";
+import { openSourceProjects } from "../data/openSource";
 import Icon from "../components/Icon.astro";
 import { experience } from "../data/experience";
 import { projectCategoryOptions } from "../data/projectCategories";
@@ -145,6 +147,17 @@ const skills = [
         ))}
       </div>
       <a class="text-link section-end-link" href="/experience/">View experience page <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <section class="cv-section shell" id="open-source" aria-labelledby="open-source-heading">
+    <div class="cv-section-heading">
+      <p class="eyebrow">Public libraries</p>
+      <h2 id="open-source-heading">Open Source</h2>
+      <p>Reusable tools I build and publish for Arabic text processing and AI workflows.</p>
+    </div>
+    <div class="role-projects">
+      {openSourceProjects.map((project) => <OpenSourceCard project={project} />)}
     </div>
   </section>
 

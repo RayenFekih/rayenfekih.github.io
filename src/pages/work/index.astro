@@ -1,18 +1,20 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import OpenSourceCard from "../../components/OpenSourceCard.astro";
+import { openSourceProjects } from "../../data/openSource";
 import { experience } from "../../data/experience";
 import { projectCategoryLabels, projectCategoryOptions } from "../../data/projectCategories";
 
-const projectCount = experience.reduce((count, job) => count + job.projects.length, 0);
+const projectCount = experience.reduce((count, job) => count + job.projects.length, openSourceProjects.length);
 ---
 <BaseLayout
   title="Selected Projects"
-  description="Selected GenAI, computer vision, forecasting, clustering, recommendation, and machine learning projects by Mohamed Rayen Fekih, grouped by employer."
+  description="Open-source libraries and selected GenAI, computer vision, forecasting, clustering, recommendation, and machine learning projects by Mohamed Rayen Fekih."
 >
   <header class="page-hero shell page-hero-compact">
     <p class="eyebrow">Portfolio</p>
     <h1>Selected Projects</h1>
-    <p>GenAI, computer vision, recommendations, pricing, forecasting, and optimization projects from my work experience.</p>
+    <p>Open-source libraries and projects spanning GenAI, computer vision, recommendations, pricing, forecasting, and optimization.</p>
   </header>
   <section class="project-filter-shell shell" aria-labelledby="project-filter-heading">
     <div class="project-filter-copy">
@@ -32,8 +34,20 @@ const projectCount = experience.reduce((count, job) => count + job.projects.leng
     </div>
   </section>
   <section class="page-section shell grouped-projects">
+    <section class="project-employer-group" data-project-group aria-labelledby="open-source-heading">
+      <header>
+        <div>
+          <p class="eyebrow">Public libraries</p>
+          <h2 id="open-source-heading">Open Source</h2>
+        </div>
+        <p>Reusable tools for Arabic NLP and AI workflows</p>
+      </header>
+      <div class="role-projects">
+        {openSourceProjects.map((project) => <OpenSourceCard project={project} />)}
+      </div>
+    </section>
     {experience.map((job) => (
-      <section class="project-employer-group" data-employer-group>
+      <section class="project-employer-group" data-project-group>
         <header>
           <div>
             <p class="eyebrow">{job.period}</p>
@@ -87,7 +101,7 @@ const projectCount = experience.reduce((count, job) => count + job.projects.leng
   <script>
     const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-project-filter]"));
     const projectCards = Array.from(document.querySelectorAll<HTMLElement>("[data-project-card]"));
-    const employerGroups = Array.from(document.querySelectorAll<HTMLElement>("[data-employer-group]"));
+    const projectGroups = Array.from(document.querySelectorAll<HTMLElement>("[data-project-group]"));
     const resultCount = document.querySelector<HTMLElement>("[data-project-count]");
     const validFocuses = new Set(filterButtons.map((button) => button.dataset.focus).filter(Boolean));
 
@@ -113,7 +127,7 @@ const projectCount = experience.reduce((count, job) => count + job.projects.leng
         if (visible) visibleCount += 1;
       });
 
-      employerGroups.forEach((group) => {
+      projectGroups.forEach((group) => {
         group.hidden = !group.querySelector("[data-project-card]:not([hidden])");
       });
 

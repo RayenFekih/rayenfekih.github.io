@@ -2,10 +2,14 @@
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "./BaseLayout.astro";
 import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import HadithDiagram from "../components/HadithDiagram.astro";
 
 const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { data } = project;
 const usesOutputLabel = ["computer-vision", "football-analytics"].includes(data.diagramType);
+const externalLinks = data.externalLinks ?? (data.externalUrl
+  ? [{ url: data.externalUrl, label: data.externalLabel ?? "Visit live project" }]
+  : []);
 ---
 <BaseLayout title={data.title} description={data.summary} type="article">
   <script
@@ -33,10 +37,14 @@ const usesOutputLabel = ["computer-vision", "football-analytics"].includes(data.
           <p class="eyebrow">{data.employer} · {data.period}</p>
           <h1>{data.title}</h1>
           <p class="case-summary">{data.summary}</p>
-          {data.externalUrl && (
-            <a class="button case-external-link" href={data.externalUrl} target="_blank" rel="noopener noreferrer">
-              {data.externalLabel ?? "Visit live project"} <span aria-hidden="true">↗</span>
-            </a>
+          {externalLinks.length > 0 && (
+            <div class="case-project-links">
+              {externalLinks.map((link) => (
+                <a class="button case-external-link" href={link.url} target="_blank" rel="noopener noreferrer">
+                  {link.label} <span aria-hidden="true">↗</span>
+                </a>
+              ))}
+            </div>
           )}
         </div>
         <dl class="case-facts">
@@ -58,7 +66,7 @@ const usesOutputLabel = ["computer-vision", "football-analytics"].includes(data.
           <a href="#architecture">Architecture</a>
           <a href="#implementation">Implementation</a>
           <a href="#evaluation">Evaluation</a>
-          <a href="#deployment">{usesOutputLabel ? "Output" : "Deployment"}</a>
+          <a href="#deployment">{data.diagramType === "hadith-detection" ? "Installation" : usesOutputLabel ? "Output" : "Deployment"}</a>
           <a href="#results">Results</a>
         </nav>
         <p class="confidentiality">{data.confidentiality}</p>
@@ -69,16 +77,26 @@ const usesOutputLabel = ["computer-vision", "football-analytics"].includes(data.
           </div>
         </section>
       </aside>
-      <div class="case-content prose">
+      <div class:list={["case-content prose", { "library-case": data.diagramType === "hadith-detection" }]}>
         <section class="case-lead">
           <p class="eyebrow">Project summary</p>
           <p>{data.problem}</p>
         </section>
         <section id="architecture">
-          <ArchitectureDiagram type={data.diagramType} label={`${data.title} architecture`} />
+          {data.diagramType === "hadith-detection"
+            ? <HadithDiagram />
+            : <ArchitectureDiagram type={data.diagramType} label={`${data.title} architecture`} />}
         </section>
         <slot />
       </div>
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .case-project-links { display: flex; flex-wrap: wrap; gap: 12px; }
+  .library-case { min-width: 0; }
+  .library-case :global(pre) { max-width: 100%; overflow-x: auto; padding: 18px; border: 1px solid var(--line); border-radius: var(--radius); }
+  .library-case :global(table) { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 14px; }
+  .library-case :global(th), .library-case :global(td) { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+</style>

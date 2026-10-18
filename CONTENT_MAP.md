@@ -21,6 +21,8 @@ npm run build
 | --- | --- |
 | Homepage text, section order, skills, education, and contact | `src/pages/index.astro` |
 | Work experience and project summaries | `src/data/experience.ts` |
+| Open-source project summaries and public links | `src/data/openSource.ts` |
+| Shared open-source project card | `src/components/OpenSourceCard.astro` |
 | Project category names and filter order | `src/data/projectCategories.ts` |
 | Detailed project case studies | `src/content/projects/*.mdx` |
 | About page | `src/pages/about/index.astro` |
@@ -42,6 +44,7 @@ The homepage is assembled in `src/pages/index.astro`.
 | Hero | Name, job title, short summary, and action links near the top of the page |
 | Project Focus Selector | Links to filtered project views; category names come from `src/data/projectCategories.ts` |
 | Work Experience | Layout is in the homepage; role and project content comes from `src/data/experience.ts` |
+| Open Source | Reads independently maintained library summaries from `src/data/openSource.ts` |
 | Skills | Edit the `skills` array near the top of the file |
 | Selected Projects | Automatically includes projects from `experience.ts` that have an `href` |
 | Education | Edit the `education` array near the top of the file |
@@ -52,10 +55,11 @@ Current homepage order:
 1. Hero
 2. Project Focus Selector
 3. Work Experience
-4. Skills
-5. Selected Projects
-6. Education
-7. Contact
+4. Open Source
+5. Skills
+6. Selected Projects
+7. Education
+8. Contact
 
 To reorder sections, move the corresponding `<section>` block in `src/pages/index.astro`.
 
@@ -116,6 +120,7 @@ Edit `src/data/experience.ts`. Each company is one object in the exported `exper
 | IslamWeb RAG Chatbot | `src/content/projects/islamweb-rag-chatbot.mdx` |
 | Khateeb Assistant | `src/content/projects/khateeb-assistant.mdx` |
 | GenAI Assistant Agent | `src/content/projects/genai-assistant-agent.mdx` |
+| hadith-detector | `src/content/projects/hadith-detector.mdx` |
 
 Each MDX file contains frontmatter at the top for case-study metadata and Markdown below it for the full narrative. Project titles, summaries, clients, metrics, technologies, and external product links may appear both in the MDX file and `experience.ts`; update both when changing shared facts.
 
@@ -136,6 +141,18 @@ externalUrl: "https://example.com/"
 externalLabel: "Visit live project"
 ```
 
+Case studies with multiple public destinations can instead use `externalLinks`:
+
+```yaml
+externalLinks:
+  - label: "GitHub"
+    url: "https://github.com/owner/repository"
+  - label: "PyPI"
+    url: "https://pypi.org/project/package/"
+```
+
+When provided, this array controls the hero action links. Existing single-link fields remain supported.
+
 To add a case study:
 
 1. Copy an existing file in `src/content/projects/`.
@@ -143,6 +160,21 @@ To add a case study:
 3. Update all frontmatter and body content.
 4. Add `href: "/work/new-project/"` to the matching project in `src/data/experience.ts`.
 5. Run `npm run build` to validate the content schema and links.
+
+## Open Source
+
+Open-source libraries are maintained separately from employer projects in `src/data/openSource.ts`.
+Each typed entry contains a title, description, contribution, technologies, categories, case-study
+`href`, labeled public `links`, and metrics. The shared `OpenSourceCard.astro` renders these entries
+on the homepage between Work Experience and Skills and on `/work/` before employer groups. They do not appear
+in employment history or the employer-derived Selected Projects list.
+
+Use existing project categories so libraries participate in the Projects page filters and count.
+Add the detailed MDX case study separately, with the same public facts and a matching route.
+The hadith-detector case study uses `diagramType: "hadith-detection"`, rendered by
+`src/components/HadithDiagram.astro`. Its public diagram separates offline resource preparation,
+exact/fuzzy detection branches, and structured results/optional HTML annotation. Update the diagram
+against current library code and release behavior; older milestone documents may describe earlier states.
 
 ## Shared Site Details
 
@@ -184,6 +216,7 @@ The category source of truth is `src/data/projectCategories.ts`. Category assign
 - The `/work/` controls and filtering script are in `src/pages/work/index.astro`.
 - Stable filtered URLs use `/work/?focus=category-value`.
 - Every project is rendered in the static HTML. The script only hides non-matching cards when JavaScript is available.
+- Open-source libraries and employer projects share the same filtering and total count. Groups use `data-project-group` and hide when they contain no matching cards.
 
 ## Colors And Typography
 

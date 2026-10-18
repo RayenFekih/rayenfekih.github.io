@@ -1,0 +1,121 @@
+---
+title: "hadith-detector"
+summary: "An offline Python library that detects Arabic Hadith passages and retrieves their supporting sources, with exact and configurable fuzzy matching."
+role: "Library author and maintainer"
+employer: "Open Source"
+period: "v0.1.1 · October 2026"
+featuredRank: 8
+problem: "Make Hadith quotations traceable inside Arabic text: locate matching passages, retrieve supporting narration records, and preserve the original wording and offsets for downstream citations and review."
+scale: "14,940 records from Sahih al-Bukhari and Sahih Muslim"
+metrics:
+  - value: "14,940"
+    label: "bundled Hadith records"
+  - value: "1.04M"
+    label: "indexed Arabic tokens"
+  - value: "Offline"
+    label: "detection after installation"
+capabilities:
+  - "Arabic text matching"
+  - "Source retrieval"
+  - "Citation workflows"
+technologies:
+  - "Python"
+  - "Arabic NLP"
+  - "Positional inverted index"
+  - "MARISA"
+  - "RapidFuzz"
+confidentiality: "Public implementation overview. Code and documentation are available on GitHub; corpus provenance and data terms are documented separately from the MIT-licensed code."
+diagramType: "hadith-detection"
+externalLinks:
+  - label: "GitHub"
+    url: "https://github.com/RayenFekih/hadith-detector"
+  - label: "PyPI"
+    url: "https://pypi.org/project/hadith-detector/"
+draft: false
+---
+
+<h2 id="context">Context</h2>
+
+Arabic articles, sermons, and generated answers can contain Hadith passages without clear source references. Finding those passages and tracing their wording back to source records helps reviewers and downstream applications work with evidence.
+
+I extended our Quran-detection approach to Hadith identification and source retrieval, and built and published **hadith-detector v0.1.1** on PyPI. The library runs locally and supports both exact matching after Arabic normalization and configurable fuzzy matching.
+
+The work supports the needs of [Khateeb Assistant](/work/khateeb-assistant/) and other Arabic AI pipelines: enriching documents, checking generated wording against indexed narrations, and preparing citations for human review.
+
+<h2 id="implementation">Matching and source retrieval</h2>
+
+### Corpus and indexing
+
+The bundled corpus contains **7,580 Sahih al-Bukhari records** and **7,360 Sahih Muslim records** from the QuranLab dataset, totaling **14,940 records and 1,039,600 indexed tokens**. Original narration text, identities, and source metadata are retained, including separate identities for duplicate texts.
+
+Offline preparation applies the same Arabic normalization used for input text: supported letter-form equivalences, diacritic and tatweel removal, and presentation-form handling. Token offsets continue to refer to the unchanged original strings. Segment boundaries prevent matches from crossing unsupported content, and symbol expansions must be consumed whole at passage endpoints.
+
+A positional inverted index stores unigram and trigram postings. Prebuilt MARISA lookups map normalized vocabulary and trigrams to the index. The package ships with the corpus and validated index, so users do not need to download data or build resources separately.
+
+### Exact matching
+
+With both error budgets set to zero, the detector examines minimum-length input windows and selects the least-frequent trigram anchor to retrieve candidate source positions. Configured minimum lengths below three use unigram postings instead. Candidates are verified and extended through ordered normalized-token equality within individual narrations.
+
+Passage selection favors more matched words, then longer original input spans and earlier positions. Overlapping candidates are resolved while valid shorter tails remain eligible. Each selected passage retains all supporting records and source occurrences.
+
+### Configurable fuzzy matching
+
+When either budget is positive, candidate retrieval uses low-frequency word anchors. If the minimum length exceeds the character-edit budget, selecting `max_errors + 1` input positions guarantees that at least one anchor remains exact for a valid alignment. Otherwise, the matcher searches eligible vocabulary using length buckets and bounded RapidFuzz distances.
+
+Ordered alignment allows character insertions, deletions, and substitutions across aligned words, plus omissions of internal source words. Input words cannot be skipped or reordered. Both budgets apply per source occurrence, and omitted words do not count toward the minimum matched length.
+
+The fuzzy path discovers candidate spans, ranks and selects non-overlapping passages, then verifies the selected spans again to recover every supporting identity and occurrence. It also returns canonical word alignments and omitted-source-token details.
+
+| Configuration | Default | Purpose |
+| --- | --- | --- |
+| `min_match_words` | `5` | Minimum aligned input words |
+| `max_errors` | `0` | Total character-edit budget across aligned words |
+| `max_missing_words` | `0` | Allowed internal source words absent from the input |
+
+Higher minimum lengths reduce short incidental matches but can miss short quotations. Larger fuzzy budgets improve tolerance while increasing candidate work and the possibility of incidental matches.
+
+<h2 id="evaluation">Coverage and performance</h2>
+
+Reported median matching latency is **approximately 1.1 ms for exact matching** and **4 ms for fuzzy matching** on a **60-word Arabic input**, excluding initialization. These measurements describe the reported benchmark workload, rather than a guarantee for every input, machine, or configuration.
+
+Initialization loads and validates the bundled resources. Reusing a detector amortizes that cost; the first fuzzy call also initializes lazy matching helpers. Long documents, common expressions, and broader matching budgets can require more work.
+
+Coverage is limited to the bundled Bukhari and Muslim corpus. A detected match provides textual support, not independent Hadith authentication or proof of quotation intent. Common phrases, narration formulas, and Quranic wording embedded in narrations can match. No detection does not establish that no Hadith exists. Source wording, context, and provenance remain part of human review.
+
+<h2 id="deployment">Installation and output</h2>
+
+The v0.1.1 package supports Python 3.11–3.14 and works offline after installation:
+
+```sh
+pip install hadith-detector
+```
+
+```python
+from hadith_detector import DetectorConfig, HadithDetector
+
+detector = HadithDetector(config=DetectorConfig(min_match_words=5))
+text = "إنما الأعمال بالنيات وإنما لكل امرئ ما نوى"
+
+matches = detector.detect(text)
+for match in matches:
+    assert text[match.start:match.end] == match.text
+    for reference in match.references:
+        print(reference.record.hadith_key, reference.record.text)
+
+# Enable limited character edits and internal source-word omissions per call.
+fuzzy_matches = detector.detect(text, max_errors=1, max_missing_words=1)
+html = detector.annotate(text)
+```
+
+`detect()` returns passages in input order, their original text, exclusive-end Python character offsets, source records, and supporting occurrences. Fuzzy results also expose edit costs and alignment details. Python offsets are not JavaScript UTF-16 offsets.
+
+`annotate()` escapes the plain input text and wraps selected passages in HTML `mark` elements. It preserves original spelling and does not insert omitted source words. Applications can use the structured detection results to build citation interfaces alongside the highlighting.
+
+<h2 id="results">Value for Arabic AI workflows</h2>
+
+- **Data enrichment:** detect matching Hadith passages and attach source metadata to Arabic content.
+- **Generated-wording verification:** compare LLM output with indexed narrations and retrieve supporting sources for review.
+- **Khutbah preparation:** support workflows prioritizing passages backed by Sahih al-Bukhari and Sahih Muslim.
+- **Citations and interfaces:** present source records and highlight matched passages using original-text offsets.
+
+The library is available on [GitHub](https://github.com/RayenFekih/hadith-detector) and [PyPI](https://pypi.org/project/hadith-detector/). Implementation details are documented in the [runtime index guide](https://github.com/RayenFekih/hadith-detector/blob/main/docs/runtime-index.md), [fuzzy matching guide](https://github.com/RayenFekih/hadith-detector/blob/main/docs/fuzzy-runtime.md), and [HTML annotation guide](https://github.com/RayenFekih/hadith-detector/blob/main/docs/html-annotation.md). The code is MIT-licensed; underlying data terms and attribution are documented separately in the repository.

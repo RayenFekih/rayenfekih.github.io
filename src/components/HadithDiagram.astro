@@ -1,0 +1,124 @@
+---
+const preparation = [
+  ["Bukhari + Muslim", "Preserve original records and metadata"],
+  ["Normalize + tokenize", "Retain source offsets and segment boundaries"],
+  ["Build positional index", "Unigram/trigram postings and MARISA lookups"],
+  ["Validate + bundle", "Ship corpus and prebuilt resources with the package"]
+];
+const branches = [
+  {
+    name: "Exact matching",
+    condition: "Both budgets = 0",
+    steps: [
+      ["Choose rare anchors", "Trigrams; unigrams when min_match_words < 3"],
+      ["Retrieve + extend", "Verify ordered normalized tokens within one narration"],
+      ["Select passages", "Rank spans and resolve overlaps; keep eligible tails"],
+      ["Collect supporting sources", "Retain every supporting record and occurrence"]
+    ]
+  },
+  {
+    name: "Fuzzy matching",
+    condition: "Either budget > 0",
+    steps: [
+      ["Retrieve word anchors", "Use approximate vocabulary if exact anchors cannot be guaranteed"],
+      ["Verify ordered alignment", "RapidFuzz character edits + internal source-word omissions"],
+      ["Select passages", "Rank spans, costs, and overlaps; keep eligible tails"],
+      ["Verify sources again", "Recover all supporting records, occurrences, and alignment traces"]
+    ]
+  }
+];
+---
+<figure class="hadith-diagram" aria-labelledby="hadith-diagram-title" aria-describedby="hadith-diagram-caption">
+  <div class="diagram-heading">
+    <span class="eyebrow">Implementation overview</span>
+    <h2 id="hadith-diagram-title">From Arabic text to supporting sources</h2>
+  </div>
+
+  <section class="diagram-stage" aria-labelledby="preparation-title">
+    <h3 id="preparation-title"><span>01</span> Offline preparation</h3>
+    <ol class="preparation-flow">
+      {preparation.map(([title, detail]) => (
+        <li><strong>{title}</strong><span>{detail}</span></li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="diagram-stage" aria-labelledby="detection-title">
+    <h3 id="detection-title"><span>02</span> Detection</h3>
+    <p class="resource-feed"><strong>Bundled index → both matching branches</strong><br />Load and validate once at initialization; reuse across calls.</p>
+    <div class="query-flow">
+      <strong>Arabic input</strong><span aria-hidden="true">→</span>
+      <strong>Normalize + tokenize<br /><small>Retain original input offsets</small></strong>
+    </div>
+    <p class="branch-label">Choose a branch using max_errors and max_missing_words</p>
+    <div class="matching-branches">
+      {branches.map((branch) => (
+        <section class="matching-branch" aria-label={branch.name}>
+          <header><h4>{branch.name}</h4><p>{branch.condition}</p></header>
+          <p class="index-input">↓ Prebuilt index + normalized input</p>
+          <ol class="branch-flow">
+            {branch.steps.map(([title, detail]) => (
+              <li><strong>{title}</strong><span>{detail}</span></li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="diagram-stage" aria-labelledby="results-title">
+    <h3 id="results-title"><span>03</span> Results</h3>
+    <div class="results-output">
+      <strong>Selected passages in input order</strong>
+      <p>Original text and offsets · supporting records and occurrences · word alignments and costs</p>
+    </div>
+    <div class="optional-output"><span aria-hidden="true">↓</span> Optional annotation: escaped HTML with <code>&lt;mark&gt;</code> highlights</div>
+  </section>
+
+  <figcaption id="hadith-diagram-caption">
+    The installed library searches bundled resources offline, without rebuilding the index.
+    Both branches preserve word order and source boundaries. Fuzzy matching includes a second
+    verification pass after passage selection to recover all supporting occurrences.
+  </figcaption>
+</figure>
+
+<style>
+  .hadith-diagram { margin: 32px 0 36px; padding: 26px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
+  .diagram-heading h2 { margin: 7px 0 24px; font-size: 23px; line-height: 1.3; }
+  .diagram-stage + .diagram-stage { margin-top: 26px; }
+  .diagram-stage h3 { display: flex; gap: 10px; align-items: baseline; margin: 0 0 14px; font-size: 18px; }
+  .diagram-stage h3 > span { color: var(--amber); font: 500 12px var(--mono); }
+  .hadith-diagram ol { list-style: none; padding: 0; margin: 0; }
+  .preparation-flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; counter-reset: preparation; }
+  .preparation-flow li { counter-increment: preparation; }
+  .preparation-flow li::before { content: counter(preparation, decimal-leading-zero); display: block; margin-bottom: 6px; color: var(--amber); font: 500 11px var(--mono); }
+  .hadith-diagram li { margin: 0; padding: 14px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .hadith-diagram li strong, .hadith-diagram li > span { display: block; }
+  .hadith-diagram li strong { color: var(--text); font-size: 14px; line-height: 1.4; }
+  .hadith-diagram li > span { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+  .resource-feed { padding: 12px 16px; border-left: 3px solid var(--accent-strong); background: var(--accent-soft); color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .resource-feed strong { color: var(--text); }
+  .query-flow { display: flex; gap: 16px; align-items: center; justify-content: center; padding: 12px; color: var(--text); font-size: 14px; text-align: center; }
+  .query-flow > span { color: var(--amber); }
+  .query-flow small { font-size: 12px; font-weight: 400; color: var(--muted); }
+  .branch-label { text-align: center; font: 11px/1.6 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+  .matching-branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .matching-branch { min-width: 0; padding: 12px; border: 1px solid var(--line-strong); border-top: 3px solid var(--accent-strong); }
+  .matching-branch header h4 { margin: 0; color: var(--text); font-size: 16px; }
+  .matching-branch header p { margin: 3px 0 0; color: var(--muted); font: 11px/1.6 var(--mono); }
+  .index-input { margin: 12px 0; color: var(--amber); font-size: 11px; }
+  .branch-flow { display: grid; gap: 10px; }
+  .branch-flow li + li::before { content: "↓"; display: block; color: var(--amber); margin: -10px 0 4px; }
+  .results-output { padding: 16px; border: 1px solid var(--accent-strong); background: var(--accent-soft); }
+  .results-output strong { color: var(--text); font-size: 15px; }
+  .results-output p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .optional-output { margin-top: 12px; color: var(--muted); font-size: 12px; }
+  .optional-output > span { color: var(--amber); margin-right: 6px; }
+  .hadith-diagram figcaption { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.7; }
+  @media (max-width: 680px) {
+    .hadith-diagram { padding: 16px; }
+    .preparation-flow, .matching-branches { grid-template-columns: 1fr; }
+    .query-flow { flex-direction: column; gap: 5px; }
+    .query-flow > span { transform: rotate(90deg); }
+  }
+</style>
