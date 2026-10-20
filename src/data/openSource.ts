@@ -27,5 +27,15 @@ export const openSourceProjects: OpenSourceProject[] = [
       { value: "14,940", label: "Hadith records from Bukhari and Muslim" },
       { value: "1.04M", label: "indexed Arabic tokens" }
     ]
+  },
+  {
+    title: "LLM Fine-Tuning Pipelines",
+    description: "Personal research project covering GRPO fine-tuning on GSM8K and an SFT dataset pipeline for certification-question generation.",
+    contribution: "Built a single-GPU Qwen2.5-3B-Instruct GRPO pipeline using Unsloth, TRL, QLoRA, vLLM generation, and five rule-based rewards, following the standard Unsloth recipe. Built resumable Gemini-based metadata extraction with Pydantic validation for SFT data. No training results or evaluation benchmarks are published.",
+    technologies: ["Python", "Unsloth", "TRL", "GRPO", "QLoRA", "vLLM", "Gemini", "Pydantic"],
+    categories: ["genai-nlp"],
+    href: "https://github.com/RayenFekih/gcp-pmle-question-style-finetuning",
+    links: [{ label: "GitHub", url: "https://github.com/RayenFekih/gcp-pmle-question-style-finetuning" }],
+    metrics: [{ value: "5", label: "rule-based reward functions" }, { value: "1 GPU", label: "training configuration" }]
   }
 ];

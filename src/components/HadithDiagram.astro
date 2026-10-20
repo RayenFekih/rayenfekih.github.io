@@ -92,7 +92,7 @@ const branches = [
   .preparation-flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; counter-reset: preparation; }
   .preparation-flow li { counter-increment: preparation; }
   .preparation-flow li::before { content: counter(preparation, decimal-leading-zero); display: block; margin-bottom: 6px; color: var(--amber); font: 500 11px var(--mono); }
-  .hadith-diagram li { margin: 0; padding: 14px; background: var(--bg-soft); border: 1px solid var(--line); }
+  .hadith-diagram li { margin: 0; padding: 14px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; }
   .hadith-diagram li strong, .hadith-diagram li > span { display: block; }
   .hadith-diagram li strong { color: var(--text); font-size: 14px; line-height: 1.4; }
   .hadith-diagram li > span { margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.5; }

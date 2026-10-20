@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Certifications from "../components/Certifications.astro";
 import OpenSourceCard from "../components/OpenSourceCard.astro";
 import { openSourceProjects } from "../data/openSource";
 import Icon from "../components/Icon.astro";
@@ -10,7 +11,7 @@ import { siteConfig } from "../config/site";
 const skills = [
   {
     title: "AI and Machine Learning",
-    items: ["GenAI", "RAG", "Semantic Search", "Agent Workflows", "Computer Vision", "Object Detection", "Multi-Object Tracking", "Recommendation Systems", "Forecasting", "Pricing Models", "Scikit-learn"]
+    items: ["GenAI", "RAG", "Semantic Search", "Agent Workflows", "Computer Vision", "Object Detection", "Multi-Object Tracking", "Recommendation Systems", "Forecasting", "Pricing Models", "Scikit-learn", "GRPO", "QLoRA", "LLM Evaluation"]
   },
   {
     title: "Programming and Data",
@@ -212,7 +213,7 @@ const skills = [
     </div>
     <article class="education-row">
       <div>
-        <h3>MS in Computer Science</h3>
+        <h3>Bachelor’s Degree in Computer Science, Artificial Intelligence Specialization</h3>
         <p>National Engineering School of Tunis (ENIT)</p>
       </div>
       <div class="job-meta">
@@ -220,6 +221,7 @@ const skills = [
         <span>Tunis, Tunisia</span>
       </div>
     </article>
+    <Certifications />
   </section>
 
   <section class="cv-contact section-toned" id="contact">
@@ -227,7 +229,7 @@ const skills = [
       <div>
         <p class="eyebrow">Contact</p>
         <h2>Get in touch</h2>
-        <p>For job opportunities or professional conversations, contact me by email or LinkedIn.</p>
+        <p>Open to relocation. For job opportunities or professional conversations, contact me by email or LinkedIn.</p>
       </div>
       <div class="contact-links">
         <a href="mailto:rayen.fekih6@gmail.com">rayen.fekih6@gmail.com <span>↗</span></a>

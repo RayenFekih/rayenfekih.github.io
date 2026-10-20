@@ -2,18 +2,20 @@
 import Icon from "./Icon.astro";
 import { siteConfig } from "../config/site";
 
-const currentPath = Astro.url.pathname;
 const links = [
-  { label: "Experience", href: "/experience/" },
-  { label: "Projects", href: "/work/" },
-  { label: "About", href: "/about/" }
+  { label: "Experience", href: "/#experience" },
+  { label: "Open Source", href: "/#open-source" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Education", href: "/#education" },
+  { label: "About", href: "/about/" },
+  { label: "Contact", href: "/#contact" }
 ];
 ---
 <header class="site-header">
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="shell nav-shell">
     <a class="brand" href="/" aria-label="Mohamed Rayen Fekih, home">
-      <span class="brand-mark">MRF</span>
       <span class="brand-name">Mohamed Rayen Fekih</span>
     </a>
     <nav aria-label="Primary navigation">
@@ -21,7 +23,6 @@ const links = [
         links.map((link) => (
           <a
             href={link.href}
-            aria-current={currentPath.startsWith(link.href) ? "page" : undefined}
           >
             {link.label}
           </a>
@@ -29,9 +30,10 @@ const links = [
       }
     </nav>
     <div class="nav-actions">
-      <button class="theme-toggle" type="button" aria-label="Toggle color theme">
-        <span class="theme-icon theme-icon-sun"><Icon name="sun" /></span>
-        <span class="theme-icon theme-icon-moon"><Icon name="moon" /></span>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Dark theme">
+        <span class="theme-thumb" aria-hidden="true"></span>
+        <span class="theme-icon theme-icon-sun" aria-hidden="true"><Icon name="sun" /></span>
+        <span class="theme-icon theme-icon-moon" aria-hidden="true"><Icon name="moon" /></span>
       </button>
       <a class="button button-small" href={siteConfig.cvPath} download>Download CV</a>
     </div>
@@ -43,9 +45,13 @@ const links = [
   const storedTheme = localStorage.getItem("theme");
   const preferredTheme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
   root.dataset.theme = storedTheme || preferredTheme;
-  document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+  const themeSwitch = document.querySelector(".theme-toggle");
+  const syncSwitch = () => themeSwitch?.setAttribute("aria-checked", String(root.dataset.theme === "dark"));
+  syncSwitch();
+  themeSwitch?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
     root.dataset.theme = next;
     localStorage.setItem("theme", next);
+    syncSwitch();
   });
 </script>

@@ -51,7 +51,9 @@ export const experience: Experience[] = [
         categories: ["genai-nlp"],
         client: "Qatar Ministry of Awqaf and Islamic Affairs",
         metrics: [
-          // { value: "165K+", label: "searchable Arabic fatwas" },
+          { value: "165K+", label: "searchable Arabic fatwas" },
+          { value: "12s → 4s", label: "end-to-end response latency (67% reduction)" },
+          { value: "3", label: "production FastAPI services: search, summarization, and Arabic TTS" },
           { value: "3s", label: "hybrid search response time" },
           { value: "10M+", label: "average monthly visits to IslamWeb" },
         ],
@@ -146,7 +148,7 @@ export const experience: Experience[] = [
     responsibilities: [
       "Built and evaluated machine learning solutions for enterprise customers.",
       "Optimized production inference and created automated delivery pipelines.",
-      "Worked across data analysis, modeling, deployment, and customer requirements."
+      "Worked across data analysis, modeling, deployment, and customer requirements; guided junior engineers."
     ],
     projects: [
       {
@@ -167,7 +169,10 @@ export const experience: Experience[] = [
           "Built product and customer segmentation models, evaluated performance, and deployed customer-specific solutions.",
         technologies: ["Python", "Scikit-learn", "Pandas", "Tableau", "Clustering"],
         categories: ["clustering"],
-        metrics: [{ value: "3", label: "Customer deployments" }]
+        metrics: [
+          { value: "3", label: "Customer deployments" },
+          { value: "5%", label: "profit increase contributed to for an enterprise customer" }
+        ]
       },
       {
         title: "Product Recommendation Systems",
@@ -191,7 +196,8 @@ export const experience: Experience[] = [
     responsibilities: [
       "Translated customer requirements into applied machine learning solutions.",
       "Prepared large operational datasets with PySpark and SQL.",
-      "Deployed models and automated recurring analytics workflows."
+      "Deployed models and automated recurring analytics workflows.",
+      "Monitored production models for performance degradation and training-serving skew using metric thresholds and automated alerts."
     ],
     projects: [
       {
@@ -199,7 +205,7 @@ export const experience: Experience[] = [
         description:
           "Scalable demand forecasting and promotion planning engine for large-scale retail operations.",
         contribution:
-          "Designed and deployed a scalable forecasting engine that predicts product demand and evaluates promotional impact across millions of retail transactions.",
+          "Contributed within a 7-person engineering team to scalable forecasting pipelines for product demand and promotional impact, working with clients to validate data and forecasts and building Plotly Dash and Tableau dashboards.",
         technologies: ["Python", "PySpark", "SQL", "Time Series"],
         categories: ["regression-forecasting"],
         metrics: [
